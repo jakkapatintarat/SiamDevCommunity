@@ -10,7 +10,7 @@ export default function Login() {
     console.log(username);
     console.log(password);
     try {
-      const response = await axios.post("/login", {
+      const response = await axios.post("http://localhost:5000/login", {
         username: username,
         password: password,
       });
