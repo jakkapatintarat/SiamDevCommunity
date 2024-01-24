@@ -1,5 +1,5 @@
-import { BrowserRouter } from 'react-router-dom';
-import Web from './routes/Routes';
+import { BrowserRouter } from "react-router-dom";
+import Web from "./routes/Routes";
 
 function App() {
   return (

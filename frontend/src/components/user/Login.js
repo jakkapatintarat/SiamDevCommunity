@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom'; 
 import axios from "axios";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   
@@ -14,8 +16,8 @@ export default function Login() {
         username: username,
         password: password,
       });
-
       console.log(response.data);
+      navigate('/')
     } catch (error) {
       console.error("Sign in failed", error);
     }
