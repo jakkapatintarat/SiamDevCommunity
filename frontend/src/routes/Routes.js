@@ -1,14 +1,10 @@
 import { Routes, Route } from "react-router-dom"
-import SignUp from "../components/SignUp"
-import SignIn from "../components/SignIn"
-import Homepage from "../components/Home"
+import Login from "../components/login"
 
 export default function Web(){
     return (
         <Routes>
-            <Route path='/signin' element={<SignIn />} />
-            <Route path='/signup' element={<SignUp />} />
-            <Route path="/homepage" element={<Homepage/>} />
+            <Route path='/login' element={<Login />} />
         </Routes>
     )
 }
