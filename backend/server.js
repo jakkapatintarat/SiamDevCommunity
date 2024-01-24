@@ -33,8 +33,8 @@ const userModel = require('./models/userSchema');
 
 // API Route
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await userModel.findOne({ email: email })
+    const { username, password } = req.body;
+    const user = await userModel.findOne({ username: username })
     if (user) {
         if (password === user.password) {
             res.send({ message: "login success", user: user })
@@ -47,7 +47,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/api/register', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, } = req.body;
     const user = await userModel.findOne({ email: email });
     if (!user) {
         const newUser = new userModel({ name, email, password });
