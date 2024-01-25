@@ -2,6 +2,8 @@ import React from 'react'
 import isAuthenticated from '../../utils/AuthAPI'
 
 export default function Homepage() {
+  const isAuthenticatedUser = isAuthenticated();
+  if(!isAuthenticatedUser) return <div>Access Denied</div>
   const products = [
     {
       id: 1,
