@@ -9,15 +9,18 @@ export default function Login() {
   
   const handleSignIn = async (event) => {
     event.preventDefault();
-    console.log(username);
-    console.log(password);
+    // console.log(username);
+    // console.log(password);
     try {
       const response = await axios.post("http://localhost:5000/login", {
         username: username,
         password: password,
-      });      
+      });
       const token = response.data.token;
-      // console.log(token);
+      if(!token){
+        navigate('/login');
+        return response.message
+      }
       localStorage.setItem('token', token);
       navigate('/')
     } catch (error) {

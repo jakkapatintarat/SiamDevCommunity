@@ -59,13 +59,14 @@ app.post('/login', async (req, res) => {
             const token = jwt.sign({ result }, 'secret', { expiresIn: '1h' });
             res.send({ message: "login success", user: result, token });
         } else {
-            res.send("user name or password is not valid")
+            res.status(401).send("user name or password is not valid")
         }
     } else {
-        res.send("not register");
+        res.status(401).send("not register");
     }
 });
 
+// Register
 app.post('/api/register', async (req, res) => {
     const { username, password, email, fname, lname, tel } = req.body;
     const user = await userModel.findOne({ username: username });
