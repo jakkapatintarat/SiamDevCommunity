@@ -17,7 +17,7 @@ export default function Login() {
         password: password,
       });
       console.log(response.data);
-      navigate('/')
+      // navigate('/')
     } catch (error) {
       console.error("Sign in failed", error);
     }

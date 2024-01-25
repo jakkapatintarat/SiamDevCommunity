@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -9,6 +12,17 @@ const PORT = process.env.PORT || 5000;
 // MiddleWare
 app.use(bodyParser.json()); // แปลง req ให้เป็น json
 app.use(cors()); // ตัวแก้ไม่ให้ติด cors header เมื่อ req ส่งมา
+app.use(
+    session({
+        secret: 'ruewiropewdsadas',
+        resave: false, // session จะไม่ถูกบันทึกลงในฐานข้อมูล
+        saveUninitialized: false, // session จะไม่ถูกบันทึกหากไม่มีการเปลี่ยนแปลง.
+        cookie: {
+            secure: false,
+            maxAge: 3600000 // 1 hour
+        }
+    })
+);
 
 // เชื่อมต่อฐานข้อมูล
 const databaseUrl = 'mongodb://127.0.0.1:27017/SiamDev';
@@ -32,14 +46,18 @@ const userModel = require('./models/userSchema');
 // BlogModel.insertMany(mockupBlog);
 
 // API Route
+
+// เข้าสู่ระบบ ตรวจสอบ user และสร้าง cookie
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const user = await userModel.findOne({ username: username })
-    if (user) {
-        if (password === user.password) {
-            res.send({ message: "login success", user: user })
+    const findUser = await userModel.findOne({ username: username })
+    if (findUser) {
+        if (password === findUser.password) {
+            const { password, ...result } = findUser;
+            req.session.user = result  // เก็บข้อมูลผู้ใช้ใน session
+            res.send({ message: "login success", user: result })
         } else {
-            res.send("wrong credentials")
+            res.send("user name or password is not valid")
         }
     } else {
         res.send("not register");
@@ -54,7 +72,7 @@ app.post('/api/register', async (req, res) => {
         await newUser.save()
         res.status(201).json(newUser)
     } else {
-        res.send({message: "email already exist"});
+        res.send({ message: "email already exist" });
     }
 })
 
