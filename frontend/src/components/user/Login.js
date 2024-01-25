@@ -17,6 +17,7 @@ export default function Login() {
         password: password,
       });      
       const token = response.data.token;
+      // console.log(token);
       localStorage.setItem('token', token);
       navigate('/')
     } catch (error) {
