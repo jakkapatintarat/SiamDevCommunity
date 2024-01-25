@@ -5,6 +5,7 @@ import AboutMe from "../components/user/AboutMe"
 import Blog from "../components/user/Blog"
 import Community from "../components/user/Community"
 import Profile from "../components/user/Profile"
+import Register from "../components/user/Register"
 
 export default function Web(){
     return (
@@ -15,6 +16,7 @@ export default function Web(){
             <Route path='/community' element={<Community/>} />
             <Route path='/' element={<Homepage/>} />
             <Route path='/profile' element={<Profile/>} />
+            <Route path='/register' element={<Register/>} />
         </Routes>
     )
 }

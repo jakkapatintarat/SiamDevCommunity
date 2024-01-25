@@ -91,6 +91,12 @@ export default function Login() {
             </div>
           </form>
         </div>
+        <p className="text-center text-sm leading-6 text-gray-500 mt-3">
+            ยังไม่เป็นสมาชิกใช่หรือไม่?{' '}
+            <a href="/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
+              สมัครสมาชิก
+            </a>
+          </p>
       </div>
     </>
   );
