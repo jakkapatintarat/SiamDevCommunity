@@ -1,13 +1,15 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
+import isAuthenticated from '../../utils/AuthAPI'
 
 const navigation = [
-  { name: 'หน้าหลัก', href: '/', current: true },
-  { name: 'ชุมชน', href: '/community', current: false },
-  { name: 'บทความ', href: '/blog', current: false },
-  { name: 'เกี่ยวกับเรา', href: '/aboutme', current: false },
-  { name: 'เข้าสู่ระบบ', href: '/login', current: false },
+  { name: 'หน้าหลัก', href: '/', },
+  { name: 'ชุมชน', href: '/community', },
+  { name: 'บทความ', href: '/blog', },
+  { name: 'เกี่ยวกับเรา', href: '/aboutme', },
+  // { name: 'เข้าสู่ระบบ', href: '/login', current: false },
 ]
 
 function classNames(...classes) {
@@ -15,6 +17,15 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  }
+
+  const isAuthenticatedUser = isAuthenticated();
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -47,15 +58,19 @@ export default function Navbar() {
                       <a
                         key={item.name}
                         href={item.href}
-                        className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
+                        className={'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium'
+                        }
                       >
                         {item.name}
+
                       </a>
                     ))}
+                    {!isAuthenticatedUser ? (
+                      <a href='/login' className={'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium'}>เข้าสู่ระบบ</a>
+                    ) : (
+                      <></>
+                    )
+                    }
                   </div>
                 </div>
               </div>
@@ -104,15 +119,14 @@ export default function Navbar() {
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="/logout"
+                          <p onClick={handleLogout}
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Sign out
-                          </a>
+                          </p>
                         )}
                       </Menu.Item>
-                      
+
                     </Menu.Items>
                   </Transition>
                 </Menu>
