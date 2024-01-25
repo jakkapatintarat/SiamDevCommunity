@@ -161,6 +161,7 @@ export default function Sidebar() {
                 </Dialog.Panel>
               </Transition.Child>
             </div>
+
           </Dialog>
         </Transition.Root>
 
@@ -317,10 +318,7 @@ export default function Sidebar() {
               </div>
             </div>
           </div>
-
-          <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{/* Your content */}</div>
-          </main>
+          
         </div>
       </div>
     </>
