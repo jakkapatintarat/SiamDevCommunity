@@ -13,11 +13,11 @@ app.use(bodyParser.json()); // แปลง req ให้เป็น json
 app.use(cors()); // ตัวแก้ไม่ให้ติด cors header เมื่อ req ส่งมา
 const authenticateToken = (req, res, next) => { // สร้าง middle ware ในการตรวจสอบ token
     const token = req.header('Authorization');
-    if(!token) {
+    if (!token) {
         res.status(401).json({ message: 'Access denied. No token provided.' });
-    }else {
+    } else {
         jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(403).json({ message: 'Invalid token.' });
+            if (err) return res.status(403).json({ message: 'Invalid token.' });
             req.use = decoded;
             next();
         });
@@ -52,10 +52,11 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const user = await userModel.findOne({ username: username })
     if (user) {
-        if (password === user.password) {
-            const { password, ...result } = user;
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (isPasswordValid) {
+            const { password, ...result } = user._doc;
             // create token
-            const token = jwt.sign({ result }, 'secret', {expiresIn: '1h'});
+            const token = jwt.sign({ result }, 'secret', { expiresIn: '1h' });
             res.send({ message: "login success", user: result, token });
         } else {
             res.send("user name or password is not valid")
@@ -66,14 +67,16 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/api/register', async (req, res) => {
-    const { name, email, password, } = req.body;
-    const user = await userModel.findOne({ email: email });
+    const { username, password, email, fname, lname, tel } = req.body;
+    const user = await userModel.findOne({ username: username });
     if (!user) {
-        const newUser = new userModel({ name, email, password });
+        // ใช้ bcrypt hash รหัสผ่าน
+        const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
+        const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel });
         await newUser.save()
         res.status(201).json(newUser)
     } else {
-        res.send({ message: "email already exist" });
+        res.send({ message: "username already exist" });
     }
 })
 
