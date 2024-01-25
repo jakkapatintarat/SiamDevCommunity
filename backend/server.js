@@ -2,9 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const session = require('express-session');
 const bcrypt = require('bcrypt');
-const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,17 +11,18 @@ const PORT = process.env.PORT || 5000;
 // MiddleWare
 app.use(bodyParser.json()); // แปลง req ให้เป็น json
 app.use(cors()); // ตัวแก้ไม่ให้ติด cors header เมื่อ req ส่งมา
-app.use(
-    session({
-        secret: 'ruewiropewdsadas',
-        resave: false, // session จะไม่ถูกบันทึกลงในฐานข้อมูล
-        saveUninitialized: false, // session จะไม่ถูกบันทึกหากไม่มีการเปลี่ยนแปลง.
-        cookie: {
-            secure: false,
-            maxAge: 3600000 // 1 hour
-        }
-    })
-);
+const authenticateToken = (req, res, next) => { // สร้าง middle ware ในการตรวจสอบ token
+    const token = req.header('Authorization');
+    if(!token) {
+        res.status(401).json({ message: 'Access denied. No token provided.' });
+    }else {
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(403).json({ message: 'Invalid token.' });
+            req.use = decoded;
+            next();
+        });
+    }
+};
 
 // เชื่อมต่อฐานข้อมูล
 const databaseUrl = 'mongodb://127.0.0.1:27017/SiamDev';
@@ -47,15 +47,16 @@ const userModel = require('./models/userSchema');
 
 // API Route
 
-// เข้าสู่ระบบ ตรวจสอบ user และสร้าง cookie
+// เข้าสู่ระบบ ตรวจสอบ user และสร้าง token
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const findUser = await userModel.findOne({ username: username })
-    if (findUser) {
-        if (password === findUser.password) {
-            const { password, ...result } = findUser;
-            req.session.user = result  // เก็บข้อมูลผู้ใช้ใน session
-            res.send({ message: "login success", user: result })
+    const user = await userModel.findOne({ username: username })
+    if (user) {
+        if (password === user.password) {
+            const { password, ...result } = user;
+            // create token
+            const token = jwt.sign({ result }, 'secret', {expiresIn: '1h'});
+            res.send({ message: "login success", user: result, token });
         } else {
             res.send("user name or password is not valid")
         }

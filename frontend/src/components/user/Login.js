@@ -15,9 +15,10 @@ export default function Login() {
       const response = await axios.post("http://localhost:5000/login", {
         username: username,
         password: password,
-      });
-      console.log(response.data);
-      // navigate('/')
+      });      
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      navigate('/')
     } catch (error) {
       console.error("Sign in failed", error);
     }
