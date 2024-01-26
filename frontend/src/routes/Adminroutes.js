@@ -5,7 +5,7 @@ export default function AdminRoutes() {
     return (
         <>
         <Routes>
-            {/* User Routes */}
+            {/* Admin Routes */}
             <Route path='/admin' element={<><Sidebar/><Dashboard/></>} />
         </Routes>
         </>
