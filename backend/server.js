@@ -32,18 +32,10 @@ try {
 } catch (error) {
     console.log(error);
 }
+
 // Model
 const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
-
-// mockup data
-// const mockupBlog = [
-//     { title: 'Article 1', content: 'Content for Article 1' },
-//     { title: 'Article 2', content: 'Content for Article 2' },
-//     { title: 'Article 3', content: 'Content for Article 3' },
-//   ];
-
-// BlogModel.insertMany(mockupBlog);
 
 // API Route
 
@@ -90,6 +82,10 @@ app.post('/api/register', async (req, res) => {
     }
 })
 
+// *****
+// Users
+// API 
+// *****
 // get all users
 app.get('/api/users', async (req, res) => {
     const users = await userModel.find();
@@ -101,15 +97,20 @@ app.post('/api/adduser', async (req, res) => {
     res.status(201).json(req.body);
 })
 
+// *****
+// Blogs
+// API 
+// *****
 // get all blogs
 app.get('/api/blogs', async (req, res) => {
     const allModels = await BlogModel.find();
     res.json(allModels).status(200);
 });
 
-app.post('/api/addblog', async (req, res) => {
-    await BlogModel.create(req.body);
-    res.status(201).json(req.body);
+// create blog
+app.post('/api/createblog', async (req, res) => {
+    const result = await BlogModel.create(req.body);
+    res.status(201).json(result);
 })
 
 
