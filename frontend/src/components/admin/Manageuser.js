@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 export default function Manageuser() {
   const [users, setUsers] = useState([]);
 
-  useEffect(async () => {
-    await axios.get('http://localhost:5000/api/users')
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/users')
     .then((res) => setUsers(res.data))
     .catch((err) => {
       console.error(err);
