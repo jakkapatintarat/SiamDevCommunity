@@ -37,9 +37,10 @@ try {
 const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
 
+// *****
 // API Route
-
-// เข้าสู่ระบบ ตรวจสอบ user และสร้าง token
+// *****
+// Login 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const user = await userModel.findOne({ username: username })
@@ -76,7 +77,7 @@ app.post('/api/register', async (req, res) => {
             tel: newUser.tel,
         }
         const token = jwt.sign(payloadToken, 'secret', { expiresIn: '1h' });
-        res.json({newUser, token});
+        res.json({ newUser, token });
     } else {
         res.send({ message: "username already exist" });
     }
@@ -101,17 +102,56 @@ app.post('/api/adduser', async (req, res) => {
 // Blogs
 // API 
 // *****
-// get all blogs
+// All blogs
 app.get('/api/blogs', async (req, res) => {
     const allModels = await BlogModel.find();
     res.json(allModels).status(200);
+});
+
+// find blog by id
+app.get('/api/blog/:id', async (req, res) => {
+    try {
+        const blogId = req.params.id;
+        const blogResult = await BlogModel.findById(blogId);
+        res.json(blogResult);
+    } catch (error) {
+        res.json({ message: 'no have this blog', error });
+    }
 });
 
 // create blog
 app.post('/api/createblog', async (req, res) => {
     const result = await BlogModel.create(req.body);
     res.status(201).json(result);
-})
+});
+
+// update blog
+app.patch('/api/update/:id', async (req, res) => {
+    try {
+        const blogId = req.params.id;   // get param
+        const updateData = req.body;
+
+        const updateBlog = await BlogModel.findByIdAndUpdate(blogId, updateData);
+        res.json({message: `update ${blogId} success!`,updateBlog});
+    } catch (error) {
+        res.json({message: `No have blog!. Can't update`,error});
+    }
+});
+
+// delete blog
+app.delete('/api/delete/:id', async (req, res) => {
+    try {
+        const blogId = req.params.id;
+        const deletedBlog = await BlogModel.findByIdAndDelete(blogId);
+        res.json({ message: `delete ${blogId} success!`, deletedBlog });
+    } catch (error) {
+        res.json({ message: `Already no have blog!. Can't delete`, error });
+    }
+});
+
+
+
+
 
 
 //start server
