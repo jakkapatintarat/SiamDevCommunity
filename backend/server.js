@@ -75,7 +75,16 @@ app.post('/api/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
         const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel });
         await newUser.save()
-        res.status(201).json(newUser)
+
+        const payloadToken = {
+            username: newUser.username,
+            email: newUser.email,
+            fname: newUser.fname,
+            lname: newUser.lname,
+            tel: newUser.tel,
+        }
+        const token = jwt.sign(payloadToken, 'secret', { expiresIn: '1h' });
+        res.json({newUser, token});
     } else {
         res.send({ message: "username already exist" });
     }
