@@ -6,9 +6,8 @@ export default function Profile() {
 
   const userData = localStorage.getItem("token")
   const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
-  const profile = decodedPayload.result
-  console.log(profile);
-
+  const profile = decodedPayload.result || decodedPayload;
+  // console.log(profile);
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
