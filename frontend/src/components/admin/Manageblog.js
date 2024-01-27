@@ -13,13 +13,12 @@ export default function Manageblog() {
 
 
   return (
-    <main className="py-10 lg:pl-72">
-      <div className="px-4 sm:px-6 lg:px-8">
-
+    <main className="pt-0 pl-72 ">
+      <div>
         {/* Table */}
-        <div className="bg-gray-900 py-10">
-          <h2 className="px-4 text-base font-semibold leading-7 text-white sm:px-6 lg:px-8">Manageblog</h2>
-          <table className="mt-6 w-full whitespace-nowrap text-left">
+        <div className="bg-gray-200 py-10">
+          <h2 className="px-4 text-base font-semibold leading-7 text-dark sm:px-6 lg:px-8">Manageblog</h2>
+          <table className="mt-6 w-full darkspace-nowrap text-left">
             <colgroup>
               <col className="w-full sm:w-4/12" />
               <col className="lg:w-4/12" />
@@ -27,7 +26,7 @@ export default function Manageblog() {
               <col className="lg:w-1/12" />
               <col className="lg:w-1/12" />
             </colgroup>
-            <thead className="border-b border-white/10 text-sm leading-6 text-white">
+            <thead className="border-b border-dark/10 text-sm leading-6 text-dark">
               <tr>
                 <th scope="col" className="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">
                   title
@@ -46,19 +45,19 @@ export default function Manageblog() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-dark/5">
               {blogs.map((blog) => (
                 <tr key={blog._id}>
                   <td className="py-4 pl-4 pr-8 sm:pl-6 lg:pl-8">
                     <div className="flex items-center gap-x-4">
                       <img src={blog.title} alt="" className="h-8 w-8 rounded-full bg-gray-800" />
-                      <div className="truncate text-sm font-medium leading-6 text-white">{blog.title}</div>
+                      <div className="truncate text-sm font-medium leading-6 text-dark">{blog.title}</div>
                     </div>
                   </td>
                   <td className="hidden py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
                     <div className="flex gap-x-3">
                       <div className="font-mono text-sm leading-6 text-gray-400">{blog.title}</div>
-                      <div className="rounded-md bg-gray-700/40 px-2 py-1 text-xs font-medium text-gray-400 ring-1 ring-inset ring-white/10">
+                      <div className="rounded-md bg-gray-700/40 px-2 py-1 text-xs font-medium text-gray-400 ring-1 ring-inset ring-dark/10">
                         {blog.title}
                       </div> 
                     </div>
@@ -71,7 +70,7 @@ export default function Manageblog() {
                       <div className='flex-none rounded-full p-1'>
                         <div className="h-1.5 w-1.5 rounded-full bg-current" />
                       </div>
-                      <div className="hidden text-white sm:block">{blog.title}</div>
+                      <div className="hidden text-dark sm:block">{blog.title}</div>
                     </div>
                   </td>
                   <td className="hidden py-4 pl-0 pr-8 text-sm leading-6 text-gray-400 md:table-cell lg:pr-20">
