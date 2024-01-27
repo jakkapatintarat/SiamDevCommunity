@@ -96,7 +96,39 @@ app.get('/api/users', async (req, res) => {
 app.post('/api/adduser', async (req, res) => {
     await userModel.create(req.body);
     res.status(201).json(req.body);
-})
+});
+
+// update user
+app.patch('/api/user/update/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;   // get param
+        const updateData = req.body;
+        console.log(updateData);
+
+        const updateUser = await userModel.findByIdAndUpdate(userId, updateData);
+        if(updateUser){
+            res.json({ message: `update ${userId} success!`, updateUser });
+        }else(err) => {
+            console.log(err);
+        }
+    } catch (error) {
+        res.json({ message: `No have user!. Can't update`, error });
+    }
+});
+
+// delete user
+app.delete('/api/delete/user/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const deletedUser = await userModel.findByIdAndDelete(userId);
+        res.json({ message: `delete ${userId} success!`, deletedUser });
+    } catch (error) {
+        res.json({ message: `Already no have user!. Can't delete`, error });
+    }
+});
+
+
+
 
 // *****
 // Blogs
@@ -132,9 +164,9 @@ app.patch('/api/update/:id', async (req, res) => {
         const updateData = req.body;
 
         const updateBlog = await BlogModel.findByIdAndUpdate(blogId, updateData);
-        res.json({message: `update ${blogId} success!`,updateBlog});
+        res.json({ message: `update ${blogId} success!`, updateBlog });
     } catch (error) {
-        res.json({message: `No have blog!. Can't update`,error});
+        res.json({ message: `No have blog!. Can't update`, error });
     }
 });
 
