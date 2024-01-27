@@ -81,6 +81,7 @@ app.post('/api/register', async (req, res) => {
     }
 })
 
+// get all blogs
 app.get('/api/blogs', async (req, res) => {
     const allModels = await BlogModel.find();
     res.json(allModels).status(200);
