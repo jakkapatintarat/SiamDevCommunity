@@ -1,6 +1,7 @@
 const { faker, tr } = require('@faker-js/faker');
 const userModel = require('../models/userSchema');
 const { default: mongoose, Mongoose } = require('mongoose');
+const brypt = require('bcrypt');
 
 // เชื่อมต่อ MongoDB
 const databaseUrl = 'mongodb://127.0.0.1:27017/SiamDev';
@@ -23,7 +24,7 @@ const seedUsers = () => ({
 
 const Admin = {
     username: 'admin',
-    password: 'admin',
+    password: '1234',
     email: 'admin@admin.com',
     fname: 'SiamDev',
     lname: 'Community',
@@ -54,7 +55,16 @@ const seedData = async () => {
 
 const seedAdmin = async () => {
     try {
-        await userModel.create(Admin);
+        const Admin = {
+            username: 'admin',
+            email: 'admin@admin.com',
+            fname: 'SiamDev',
+            lname: 'Community',
+            tel: '0841085111',
+        }
+        const hashedPassword = await brypt.hash('1234', 10);
+        const newUser = new userModel({ username: Admin.username, password: hashedPassword, email: Admin.email, fname: Admin.fname, lname: Admin.lname, tel:Admin.tel });
+        await newUser.save()
         console.log('Admin seeded successfully');
     } catch (error) {
         console.error('Error seeding admin:', error.message);
