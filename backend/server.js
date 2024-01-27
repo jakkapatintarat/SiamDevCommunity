@@ -81,6 +81,17 @@ app.post('/api/register', async (req, res) => {
     }
 })
 
+// get all users
+app.get('/api/users', async (req, res) => {
+    const users = await userModel.find();
+    res.json(users).status(200);
+});
+
+app.post('/api/adduser', async (req, res) => {
+    await userModel.create(req.body);
+    res.status(201).json(req.body);
+})
+
 // get all blogs
 app.get('/api/blogs', async (req, res) => {
     const allModels = await BlogModel.find();
