@@ -1,6 +1,6 @@
-const { faker } = require('@faker-js/faker');
+const { faker, tr } = require('@faker-js/faker');
 const userModel = require('../models/userSchema');
-const { default: mongoose } = require('mongoose');
+const { default: mongoose, Mongoose } = require('mongoose');
 
 // เชื่อมต่อ MongoDB
 const databaseUrl = 'mongodb://127.0.0.1:27017/SiamDev';
@@ -21,7 +21,16 @@ const seedUsers = () => ({
     tel: faker.phone.number(),
 });
 
-const fakeUsers = Array.from({ length: 20 }, seedUsers);
+const Admin = {
+    username: 'admin',
+    password: 'admin',
+    email: 'admin@admin.com',
+    fname: 'SiamDev',
+    lname: 'Community',
+    tel: '0841085111',
+}
+
+const fakeUsers = Array.from({ length: 19 }, seedUsers);
 
 // ตรวจสอบข้อมูล
 const seedData = async () => {
@@ -29,14 +38,34 @@ const seedData = async () => {
         const count = await userModel.countDocuments({});
         if (count > 0) {
             await userModel.deleteMany({});
+        } else {
+            await userModel.create(fakeUsers);
+            await seedAdmin();
+
+            console.log('Data seeded successfully');
         }
-        await userModel.create(fakeUsers);
-        console.log('Data seeded successfully');
     } catch (error) {
         console.error('Error:', error.message);
     } finally {
-        mongoose.connection.close();
+        await mongoose.connection.close();
+        console.log('disconnect database');
     }
 }
 
-seedData();
+const seedAdmin = async () => {
+    try {
+        await userModel.create(Admin);
+        console.log('Admin seeded successfully');
+    } catch (error) {
+        console.error('Error seeding admin:', error.message);
+    }
+}
+
+seedData()
+
+// seedData()
+//     .then(() => seedAdmin())
+//     .finally(() => {
+//         mongoose.connection.close();
+//         console.log('Database connection closed');
+//     });
