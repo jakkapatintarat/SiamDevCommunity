@@ -7,7 +7,7 @@ import isAuthenticated from '../../utils/AuthAPI'
 const navigation = [
   { name: 'หน้าหลัก', href: '/', },
   { name: 'ชุมชน', href: '/community', },
-  { name: 'บทความ', href: '/blog', },
+  { name: 'บทความ', href: '/blogs', },
   { name: 'เกี่ยวกับเรา', href: '/aboutme', },
   // { name: 'เข้าสู่ระบบ', href: '/login', current: false },
 ]
