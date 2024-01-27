@@ -1,14 +1,31 @@
-import React from 'react'
+import React from "react"
 
 export default function Community() {
+
   return (
-    <div class="flex mx-72 my-10">
-      <div class="flex-auto w-2/3 border-4 border-purple-400 p-20 m-1 bg-slate-200">
-        test
+    <>
+      <div>
+        <div className="lg:pl-20 border-3 border-gray-950 w-full">
+
+
+
+          <main className="xl:pl-96 ">
+            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 ">
+              <div className="border-2 border-black p-96"></div>
+            </div>
+          </main>
+
+
+        </div>
+
+
+        <aside className="fixed bottom-0 left-10 top-16 hidden w-96 overflow--auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+          <div className="border-2 border-black p-20 m-5">บทความที่ 1 </div>
+          <div className="border-2 border-black p-20 m-5">บทความที่ 2 </div>
+          <div className="border-2 border-black p-20 m-5">บทความที่ 3 </div>
+          <div className="border-2 border-black p-20 m-5">บทความที่ 4 </div>
+        </aside>
       </div>
-      <div class="flex-auto w-1/3 border-4 border-purple-400 p-20  m-1">
-        
-      </div>
-    </div>
+    </>
   )
 }

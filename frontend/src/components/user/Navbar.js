@@ -46,11 +46,13 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
+                  {/* <img
                     className="h-10 w-auto"
-                    src="https://scontent.fhdy3-1.fna.fbcdn.net/v/t1.18169-9/12118729_1512956029017311_8797002292308185755_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=7a1959&_nc_eui2=AeFfHuX9CN1RsrUmfPb7MM9M8VrC0FAg18vxWsLQUCDXyyXgiaooK6xUe8KYVrUF-5M-t0a5q3Vkrvf1-cyuvwQo&_nc_ohc=fyMvOPE5gIUAX9QNLGR&_nc_ht=scontent.fhdy3-1.fna&oh=00_AfB0-RhDOJxyo-xnMYGVwUa4qUg7lYue__dr-6PS5QKmyw&oe=65D9EF8B"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Font_S.svg/544px-Font_S.svg.png"
                     alt="Your Company"
-                  />
+                  /> */}
+                  <a href='/' className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">SiamDevCommunity</a>
+
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -65,15 +67,11 @@ export default function Navbar() {
 
                       </a>
                     ))}
-                    {!isAuthenticatedUser ? (
-                      <a href='/login' className={'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium'}>เข้าสู่ระบบ</a>
-                    ) : (
-                      <></>
-                    )
-                    }
+
                   </div>
                 </div>
               </div>
+              {isAuthenticatedUser ? (
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <button
                   type="button"
@@ -131,6 +129,12 @@ export default function Navbar() {
                   </Transition>
                 </Menu>
               </div>
+              ) : (
+                <>
+                 <a href='/login' className={'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium'}>เข้าสู่ระบบ</a>
+                </>
+              )
+              }
             </div>
           </div>
 
