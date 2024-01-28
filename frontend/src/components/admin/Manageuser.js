@@ -1,8 +1,18 @@
 import axios from 'axios';
 import React, { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import isAuthorized from '../../utils/Adminisauthorized';
 
 export default function Manageuser() {
+  // Check Auth
+  useEffect(() => {
+    const checkAutho = async () => {
+      if (!isAuthorized) 
+      return window.location('/login');
+    }
+    checkAutho();
+  }, []);
+
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false)
   const [username, setUsername] = useState('');

@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import isAuthorized from '../../utils/Adminisauthorized';
 import { redirect } from 'react-router-dom';
 
-
-
 export default function Dashboard() {
-  isAuthorized();
-  if (!isAuthorized) return redirect('/login')
+  // Check Auth
+  useEffect(() => {
+    const checkAutho = async () => {
+      if (!isAuthorized){
+        console.log(isAuthorized);
+        // window.location.href = '/admin';
+      }else{
+        await checkAutho();
+      }
+    }
+  }, []);
 
   return (
     <main className="py-10 lg:pl-72">

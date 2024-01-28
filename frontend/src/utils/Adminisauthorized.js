@@ -1,39 +1,22 @@
 const isAuthorized = () => {
     try {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (!token) {
+            console.log('ไม่พบ token');
+            return false
+        } else {
             const decodedPayload = JSON.parse(atob(token.split(".")[1]));
             const profile = decodedPayload.result || decodedPayload;
             if (profile.role === 'admin') {
-                return true;
+                return true
             } else {
-                window.location('/login');
-                return 'Can not access';
+                return false
             }
-        } else {
-            // ถ้าไม่มี token
-            window.location('/login');
-            return null
         }
     } catch (error) {
-        // กรณีเกิด error, ส่งไปหน้า login
-        window.location.href = '/login';
-        return null;
+        console.log(error);
+        return false
     }
-
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //     const decodedPayload = JSON.parse(atob(token.split(".")[1]));
-    //     const profile = decodedPayload.result || decodedPayload;
-    //     if(profile.role === 'admin'){
-    //         const isAdmin = true;
-    //         return isAdmin;
-    //     }else{
-    //         return 'Can not access to this page';
-    //     }
-    // } else {
-    //     return redirect('/login');
-    // }
 }
 
 export default isAuthorized;

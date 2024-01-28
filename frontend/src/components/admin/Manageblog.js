@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import isAuthorized from '../../utils/Adminisauthorized';
+import { redirect } from 'react-router-dom';
 
 export default function Manageblog() {
+  // Check Auth
+  useEffect(() => {
+    const checkAutho = async () => {
+      if(!isAuthorized) window.location('/login');
+    }
+    checkAutho();
+  }, []);
+
+
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
@@ -10,7 +21,6 @@ export default function Manageblog() {
     .then((res) => setBlogs(res.data))
     .catch((err) => console.error('Error get blogs', err))
   }, []);
-
 
   return (
     <main className="pt-0 pl-72 ">

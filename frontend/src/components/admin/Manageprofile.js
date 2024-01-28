@@ -1,6 +1,17 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
+import isAuthorized from '../../utils/Adminisauthorized';
+import { useEffect } from 'react';
 
 export default function Manageprofile() {
+    // Check Auth
+    useEffect(() => {
+        const checkAutho = async () => {
+            if (!isAuthorized)
+                return window.location('/login');
+        }
+        checkAutho();
+    }, []);
+
     return (
         <main className="py-10 lg:pl-72 bg-gray-200">
             <div className="px-4 sm:px-6 lg:px-8 ">
