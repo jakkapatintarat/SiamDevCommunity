@@ -2,35 +2,42 @@ import React, { useEffect } from 'react'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
-    Bars3Icon,
-    FolderIcon,
-    HomeIcon,
-    UsersIcon,
-    XMarkIcon,
+  Bars3Icon,
+  FolderIcon,
+  HomeIcon,
+  UsersIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import isAuthorized from '../../utils/Adminisauthorized';
 
 const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: HomeIcon},
-    { name: 'จัดการผู้ใช้', href: '/admin/manageuser', icon: UsersIcon},
-    { name: 'จัดการบทความ', href: '/admin/manageblog', icon: FolderIcon},
+  { name: 'Dashboard', href: '/admin', icon: HomeIcon },
+  { name: 'จัดการผู้ใช้', href: '/admin/manageuser', icon: UsersIcon },
+  { name: 'จัดการบทความ', href: '/admin/manageblog', icon: FolderIcon },
 ]
 
 function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-  }
+  return classes.filter(Boolean).join(' ')
+}
 export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [user, setUser] = useState('');
 
   useEffect(() => {
-    isAuthorized()
-    // console.log(auth);
+    const a = isAuthorized();
+    // console.log(a);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('no token side' + token);
+    } else {
+      const decodedPayload = JSON.parse(atob(token.split(".")[1]));
+      const profile = decodedPayload.result || decodedPayload;
+      setUser(profile);
+    }
   }, []);
 
-  // const token = localStorage.getItem('token');
-  // // const decodedPayload = JSON.parse(atob(token.split(".")[1]));
-  // // const profile = decodedPayload.result || decodedPayload;
-  // console.log(profile);
+
+
 
   return (
     <>
@@ -157,8 +164,8 @@ export default function Sidebar() {
                     />
                     <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">
-                      {/* {profile.fname} {profile.lname} */}
-                      </span>
+                      {user.fname} {user.lname}
+                    </span>
                   </a>
                 </li>
               </ul>
@@ -183,5 +190,5 @@ export default function Sidebar() {
         </div>
       </div>
     </>
-  ) 
+  )
 }

@@ -1,13 +1,16 @@
 const isAuthorized = () => {
     const token = localStorage.getItem('token');
-    console.log(token);
+    // console.log(token);
     if (token !== null) {
         const decodedPayload = JSON.parse(atob(token.split(".")[1]));
         const profile = decodedPayload.result || decodedPayload;
-        if (profile.role === 'admin') {
-            return true
-        } else {
+        // console.log(profile);
+        const role = profile.role
+        if (role !== "admin") {
+            window.location.href = '/login'
             return false
+        } else {
+            return true
         }
     } else {
         window.location.href = '/login'

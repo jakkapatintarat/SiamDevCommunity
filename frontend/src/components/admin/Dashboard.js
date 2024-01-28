@@ -5,17 +5,9 @@ import { redirect, useNavigate } from 'react-router-dom';
 export default function Dashboard() {
   const navigate = useNavigate();
   // Check Auth
-  isAuthorized()
-  if(isAuthorized === false) return navigate('/login')
-  // useEffect(() => {
-  //   const checkAutho = async () => {
-  //     if (!isAuthorized){
-  //       console.log(isAuthorized);
-  //       // window.location.href = '/admin';
-  //     }
-  //   }
-  //   checkAutho();
-  // }, []);
+  useEffect(() => {
+    isAuthorized();
+  }, []);
 
   return (
     <main className="py-10 lg:pl-72">

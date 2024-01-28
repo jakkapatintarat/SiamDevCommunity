@@ -61,7 +61,7 @@ app.post('/api/register', async (req, res) => {
     if (!user) {
         // ใช้ bcrypt hash รหัสผ่าน
         const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
-        const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel });
+        const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel, role: 'user' });
         await newUser.save()
 
         const payloadToken = {
@@ -70,6 +70,7 @@ app.post('/api/register', async (req, res) => {
             fname: newUser.fname,
             lname: newUser.lname,
             tel: newUser.tel,
+            role: newUser.role,
         }
         const token = jwt.sign(payloadToken, 'secret', { expiresIn: '1h' });
         res.json({ newUser, token });
