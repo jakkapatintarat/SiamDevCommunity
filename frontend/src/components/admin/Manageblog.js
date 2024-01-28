@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, } from 'react'
 import axios from 'axios';
 import isAuthorized from '../../utils/Adminisauthorized';
-import { redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 
 export default function Manageblog() {
-  // Check Auth
   useEffect(() => {
-    const checkAutho = async () => {
-      if(!isAuthorized) window.location('/login');
-    }
-    checkAutho();
+    const auth = isAuthorized()
+    // console.log(auth);
   }, []);
-
 
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     // get data
     axios.get('http://localhost:5000/api/blogs')
-    .then((res) => setBlogs(res.data))
-    .catch((err) => console.error('Error get blogs', err))
+      .then((res) => setBlogs(res.data))
+      .catch((err) => console.error('Error get blogs', err))
   }, []);
 
   return (
@@ -69,7 +65,7 @@ export default function Manageblog() {
                       <div className="font-mono text-sm leading-6 text-gray-400">{blog.title}</div>
                       <div className="rounded-md bg-gray-700/40 px-2 py-1 text-xs font-medium text-gray-400 ring-1 ring-inset ring-dark/10">
                         {blog.title}
-                      </div> 
+                      </div>
                     </div>
                   </td>
                   <td className="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">

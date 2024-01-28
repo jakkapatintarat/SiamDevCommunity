@@ -1,20 +1,16 @@
 const isAuthorized = () => {
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log('ไม่พบ token');
-            return false
+    const token = localStorage.getItem('token');
+    console.log(token);
+    if (token !== null) {
+        const decodedPayload = JSON.parse(atob(token.split(".")[1]));
+        const profile = decodedPayload.result || decodedPayload;
+        if (profile.role === 'admin') {
+            return true
         } else {
-            const decodedPayload = JSON.parse(atob(token.split(".")[1]));
-            const profile = decodedPayload.result || decodedPayload;
-            if (profile.role === 'admin') {
-                return true
-            } else {
-                return false
-            }
+            return false
         }
-    } catch (error) {
-        console.log(error);
+    } else {
+        window.location.href = '/login'
         return false
     }
 }

@@ -5,12 +5,9 @@ import { useEffect } from 'react';
 export default function Manageprofile() {
     // Check Auth
     useEffect(() => {
-        const checkAutho = async () => {
-            if (!isAuthorized)
-                return window.location('/login');
-        }
-        checkAutho();
-    }, []);
+        const auth = isAuthorized()
+        // console.log(auth);
+      }, []);
 
     return (
         <main className="py-10 lg:pl-72 bg-gray-200">

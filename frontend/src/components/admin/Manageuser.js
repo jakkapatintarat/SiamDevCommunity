@@ -5,13 +5,13 @@ import isAuthorized from '../../utils/Adminisauthorized';
 
 export default function Manageuser() {
   // Check Auth
-  useEffect(() => {
-    const checkAutho = async () => {
-      if (!isAuthorized) 
-      return window.location('/login');
-    }
-    checkAutho();
-  }, []);
+  // useEffect(() => {
+  //   const checkAutho = async () => {
+  //     if (!isAuthorized) 
+  //     return window.location('/login');
+  //   }
+  //   checkAutho();
+  // }, []);
 
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false)

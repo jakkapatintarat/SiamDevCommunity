@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react'
 import isAuthorized from '../../utils/Adminisauthorized';
-import { redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   // Check Auth
-  useEffect(() => {
-    const checkAutho = async () => {
-      if (!isAuthorized){
-        console.log(isAuthorized);
-        // window.location.href = '/admin';
-      }else{
-        await checkAutho();
-      }
-    }
-  }, []);
+  isAuthorized()
+  if(isAuthorized === false) return navigate('/login')
+  // useEffect(() => {
+  //   const checkAutho = async () => {
+  //     if (!isAuthorized){
+  //       console.log(isAuthorized);
+  //       // window.location.href = '/admin';
+  //     }
+  //   }
+  //   checkAutho();
+  // }, []);
 
   return (
     <main className="py-10 lg:pl-72">

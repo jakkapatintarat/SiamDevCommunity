@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
@@ -8,6 +8,7 @@ import {
     UsersIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
+import isAuthorized from '../../utils/Adminisauthorized';
 
 const navigation = [
     { name: 'Dashboard', href: '/admin', icon: HomeIcon},
@@ -21,9 +22,14 @@ function classNames(...classes) {
 export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const token = localStorage.getItem('token');
-  const decodedPayload = JSON.parse(atob(token.split(".")[1]));
-  const profile = decodedPayload.result || decodedPayload;
+  useEffect(() => {
+    isAuthorized()
+    // console.log(auth);
+  }, []);
+
+  // const token = localStorage.getItem('token');
+  // // const decodedPayload = JSON.parse(atob(token.split(".")[1]));
+  // // const profile = decodedPayload.result || decodedPayload;
   // console.log(profile);
 
   return (
@@ -150,7 +156,9 @@ export default function Sidebar() {
                       alt=""
                     />
                     <span className="sr-only">Your profile</span>
-                    <span aria-hidden="true">{profile.fname} {profile.lname}</span>
+                    <span aria-hidden="true">
+                      {/* {profile.fname} {profile.lname} */}
+                      </span>
                   </a>
                 </li>
               </ul>
