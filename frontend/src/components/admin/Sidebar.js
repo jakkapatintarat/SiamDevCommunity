@@ -1,33 +1,18 @@
 import React from 'react'
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import {
     Bars3Icon,
-    BellIcon,
-    CalendarIcon,
-    ChartPieIcon,
-    Cog6ToothIcon,
-    DocumentDuplicateIcon,
     FolderIcon,
     HomeIcon,
     UsersIcon,
     XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+} from '@heroicons/react/24/outline';
 
 const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: HomeIcon, current: true },
-    { name: 'จัดการผู้ใช้', href: '/admin/manageuser', icon: UsersIcon, current: false },
-    { name: 'จัดการบทความ', href: '/admin/manageblog', icon: FolderIcon, current: false },
-]
-const teams = [
-    { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-    { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-    { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
-const userNavigation = [
-    { name: 'Your profile', href: '#' },
-    { name: 'Sign out', href: '#' },
+    { name: 'Dashboard', href: '/admin', icon: HomeIcon},
+    { name: 'จัดการผู้ใช้', href: '/admin/manageuser', icon: UsersIcon},
+    { name: 'จัดการบทความ', href: '/admin/manageblog', icon: FolderIcon},
 ]
 
 function classNames(...classes) {
@@ -35,6 +20,11 @@ function classNames(...classes) {
   }
 export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const token = localStorage.getItem('token');
+  const decodedPayload = JSON.parse(atob(token.split(".")[1]));
+  const profile = decodedPayload.result || decodedPayload;
+  // console.log(profile);
 
   return (
     <>
@@ -122,7 +112,6 @@ export default function Sidebar() {
 
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
             <div className="flex h-16 shrink-0 items-center">
               <img
@@ -139,12 +128,7 @@ export default function Sidebar() {
                       <li key={item.name}>
                         <a
                           href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-gray-800 text-white'
-                              : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
+                          className='text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                         >
                           <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                           {item.name}
@@ -166,7 +150,7 @@ export default function Sidebar() {
                       alt=""
                     />
                     <span className="sr-only">Your profile</span>
-                    <span aria-hidden="true">Tom Cook</span>
+                    <span aria-hidden="true">{profile.fname} {profile.lname}</span>
                   </a>
                 </li>
               </ul>
