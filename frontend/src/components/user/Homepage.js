@@ -2,8 +2,8 @@ import React from 'react'
 import isAuthenticated from '../../utils/AuthAPI'
 
 export default function Homepage() {
-  const isAuthenticatedUser = isAuthenticated();
-  if(!isAuthenticatedUser) return <div>Access Denied</div>
+  // isAuthenticated();
+  // if(!isAuthenticatedUser) return <div>Access Denied</div>
   const products = [
     {
       id: 1,
@@ -15,7 +15,7 @@ export default function Homepage() {
       imageAlt: 'Hand stitched, orange leather long wallet.',
     },
     {
-      id: 1,
+      id: 2,
       name: 'บทช่วยสอน React',
       color: 'ปูพื้นฐานกันหน่อยวัยรุ่น',
       price: '$10000',
@@ -24,7 +24,7 @@ export default function Homepage() {
       imageAlt: 'Hand stitched, orange leather long wallet.',
     },
     {
-      id: 1,
+      id: 3,
       name: 'บทช่วยสอน React',
       color: 'ปูพื้นฐานกันหน่อยวัยรุ่น',
       price: '$10000',
