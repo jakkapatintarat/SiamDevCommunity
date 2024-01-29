@@ -17,6 +17,16 @@ export default function Manageblog() {
     img: null,
   });
 
+  const handleDeleteClick = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:5000/api/delete/${id}`)
+      // console.log(res);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const handlefileChange = (e) => {
     setBlogData({ ...blogData, img: e.target.files[0] })
   }
@@ -48,13 +58,7 @@ export default function Manageblog() {
   }, []);
 
   return (
-    <main className="pt-0 pl-72 ">
-      {/* <form onSubmit={createBlog} encType='multipart-formdata'>
-        <input id="title" name='title' type='text' onChange={(e) => setBlogData((prev) => ({ ...prev, title: e.target.value }))} />
-        <input id="img" name="img" type="file" onChange={handlefileChange} />
-        <button type='submit'>
-          send</button>
-      </form> */}
+    <main className="pt-0 pl-72">
       <div>
         {/* Table */}
         <div className="bg-gray-200">
@@ -110,13 +114,14 @@ export default function Manageblog() {
                       {blogs.map((blog) => (
                         // console.log(blog.create_at)
                         <tr key={blog._id}>
-                          <td className="darkspace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-dark sm:pl-0">
+                          <td className="darkspace-nowrap py-4 pl-4 pr-3 text-sm text-dark sm:pl-0">
                             {blog.title}
                           </td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">
                             <img src={blog.img} alt={blog.title} style={{ maxWidth: '100px' }} />
                           </td>
-                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.author}</td>
+                          <td 
+                          className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.author}</td>
                           {/* <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.content}</td> */}
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{new Date(blog.create_at).toUTCString()}</td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{new Date(blog.update_at).toUTCString()}</td>
@@ -145,7 +150,7 @@ export default function Manageblog() {
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"
-                              // onClick={() => handleDeleteClick(user._id)}
+                              onClick={() => handleDeleteClick(blog._id)}
                               className="text-red-400 hover:text-red-600"
                             >
                               Delete

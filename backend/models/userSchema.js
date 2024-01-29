@@ -8,6 +8,14 @@ const userSchema = new mongoose.Schema({
     lname: String,
     tel: String,
     role: String,
+    create_at: {
+        type: Date,
+        default: Date.now(),
+    },
+    update_at: {
+        type: Date,
+        default: Date.now(),
+    }
 })
 
 const userModel = mongoose.model("users", userSchema);

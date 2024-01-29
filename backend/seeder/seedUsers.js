@@ -23,6 +23,16 @@ const seedUsers = () => ({
     role: 'user',
 });
 
+const seedAdmins = () => ({
+    username: faker.internet.userName(),
+    password: faker.internet.password(),
+    email: faker.internet.email(),
+    fname: faker.person.firstName(),
+    lname: faker.person.lastName(),
+    tel: faker.phone.number(),
+    role: 'admin',
+});
+
 const Admin = {
     username: 'admin',
     password: '1234',
@@ -32,7 +42,8 @@ const Admin = {
     tel: '0841085111',
 }
 
-const fakeUsers = Array.from({ length: 19 }, seedUsers);
+const fakeUsers = Array.from({ length: 14 }, seedUsers);
+const fakeAdmins = Array.from({ length: 5 }, seedAdmins);
 
 // ตรวจสอบข้อมูล
 const seedData = async () => {
@@ -43,6 +54,7 @@ const seedData = async () => {
         } else {
             await userModel.create(fakeUsers);
             await seedAdmin();
+            await userModel.create(fakeAdmins);
 
             console.log('Data seeded successfully');
         }
@@ -67,7 +79,7 @@ const seedAdmin = async () => {
         const hashedPassword = await brypt.hash('1234', 10);
         const newUser = new userModel({ username: Admin.username, password: hashedPassword, email: Admin.email, fname: Admin.fname, lname: Admin.lname, tel: Admin.tel, role: Admin.role });
         await newUser.save()
-        console.log('Admin seeded successfully');
+        console.log('SiamDev Admin seeded successfully');
     } catch (error) {
         console.error('Error seeding admin:', error.message);
     }

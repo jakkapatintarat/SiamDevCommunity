@@ -148,9 +148,6 @@ export default function Manageuser() {
                           <span className="sr-only">Edit</span>
                         </th>
                         <th scope="col" className="relative w-6/6 py-3.5 pl-3 pr-4 sm:pr-0">
-                          <span className="sr-only">Edit</span>
-                        </th>
-                        <th scope="col" className="relative w-6/6 py-3.5 pl-3 pr-4 sm:pr-0">
                           <span className="sr-only">delete</span>
                         </th>
                       </tr>
@@ -163,7 +160,19 @@ export default function Manageuser() {
                           </td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900" hidden>{user.password}</td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{user.email}</td>
-                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{user.fname}</td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            {user.role === 'user' ? (
+                              <span className="inline-flex items-center rounded-md bg-green-200 px-2 py-1 text-sm font-bold text-green-700 ring-1 ring-inset ring-green-600/20">
+                                user
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center rounded-md bg-red-200 px-2 py-1 text-sm font-bold text-red-700 ring-1 ring-inset ring-green-600/20">
+                                admin
+                              </span>
+                            )}
+
+                          </td>
+                          {/* <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{user.role}</td> */}
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"

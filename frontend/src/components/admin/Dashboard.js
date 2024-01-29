@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import isAuthorized from '../../utils/Adminisauthorized';
+import TopBlogs from './components/TopBolgs';
 
 export default function Dashboard() {
   // Check Auth
@@ -10,6 +11,7 @@ export default function Dashboard() {
   return (
     <main className="py-10 lg:pl-72">
       <div className="px-4 sm:px-6 lg:px-8">
+        {/* card */}
         <div>
           <h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3>
 
@@ -91,6 +93,20 @@ export default function Dashboard() {
             </div>
           </dl>
         </div>
+        {/* end card */}
+        {/* table */}
+        <div className='mt-10'>
+          <div className="rounded overflow-hidden shadow bg-white mx-2 w-full">
+            <div className="px-6 py-2 border-b bg-gray-600 border-light-grey">
+              <div className="font-bold text-white text-xl">Trending Blogs</div>
+            </div>
+            <div className='mx-10'>
+              <TopBlogs />
+            </div>
+          </div>
+        </div>
+
+        {/* end table */}
       </div>
     </main>
   );
