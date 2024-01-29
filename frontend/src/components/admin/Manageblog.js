@@ -44,6 +44,7 @@ export default function Manageblog() {
     axios.get('http://localhost:5000/api/blogs')
       .then((res) => setBlogs(res.data))
       .catch((err) => console.error('Error get blogs', err))
+    // console.log(blogs);
   }, []);
 
   return (
@@ -79,18 +80,21 @@ export default function Manageblog() {
                     <thead>
                       <tr>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-dark sm:pl-0">
-                          Author
+                          Title
                         </th>
                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
                           Image
                         </th>
                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
-                          Title
+                          Author
                         </th>
                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
-                          Content
+                          {/* Content */}
+                          create_at
                         </th>
-
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
+                          update_at
+                        </th>
                         <th scope="col" className="relative w-6/6 py-3.5 pl-3 pr-4 sm:pr-0">
                           <span className="sr-only">Edit</span>
                         </th>
@@ -104,15 +108,18 @@ export default function Manageblog() {
                     </thead>
                     <tbody className="divide-y divide-gray-300">
                       {blogs.map((blog) => (
+                        // console.log(blog.create_at)
                         <tr key={blog._id}>
                           <td className="darkspace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-dark sm:pl-0">
-                            {blog.author}
+                            {blog.title}
                           </td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">
                             <img src={blog.img} alt={blog.title} style={{ maxWidth: '100px' }} />
                           </td>
-                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.title}</td>
-                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.content}</td>
+                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.author}</td>
+                          {/* <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.content}</td> */}
+                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{new Date(blog.create_at).toUTCString()}</td>
+                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{new Date(blog.update_at).toUTCString()}</td>
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"

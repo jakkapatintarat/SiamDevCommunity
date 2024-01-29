@@ -172,7 +172,7 @@ app.post('/api/createblog', upload.single('img'), async (req, res) => {
         title,
         content,
         author,
-        img
+        img,
     }
     const newBlog = new BlogModel(newBlogData);
     try {

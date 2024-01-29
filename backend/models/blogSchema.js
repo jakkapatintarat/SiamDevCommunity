@@ -5,6 +5,14 @@ const BlogSchema = new mongoose.Schema({
     content: String,
     img: String,
     author: String,
+    create_at: {
+        type: Date,
+        default: Date.now(),
+    },
+    update_at: {
+        type: Date,
+        default: Date.now(),
+    }
 });
 
 const BlogModel = mongoose.model('blogs', BlogSchema);
