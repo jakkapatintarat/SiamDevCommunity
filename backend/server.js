@@ -4,13 +4,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// MiddleWare
-app.use(bodyParser.json()); // แปลง req ให้เป็น json
-app.use(cors()); // ตัวแก้ไม่ให้ติด cors header เมื่อ req ส่งมา
 
 // เชื่อมต่อฐานข้อมูล
 const databaseUrl = 'mongodb://127.0.0.1:27017/SiamDev';
@@ -20,10 +18,25 @@ try {
 } catch (error) {
     console.log(error);
 }
-
 // Model
 const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
+
+// file path / storage
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './frontend/public/images/');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname);
+    }
+});
+
+// MiddleWare
+const upload = multer({ storage: storage });
+app.use(bodyParser.json()); // แปลง req ให้เป็น json
+app.use(cors()); // ตัวแก้ไม่ให้ติด cors header เมื่อ req ส่งมา
+
 
 // *****
 // API Route
@@ -102,9 +115,9 @@ app.patch('/api/user/update/:id', async (req, res) => {
         console.log(updateData);
 
         const updateUser = await userModel.findByIdAndUpdate(userId, updateData);
-        if(updateUser){
+        if (updateUser) {
             res.json({ message: `update ${userId} success!`, updateUser });
-        }else(err) => {
+        } else (err) => {
             console.log(err);
         }
     } catch (error) {
@@ -122,9 +135,6 @@ app.delete('/api/delete/user/:id', async (req, res) => {
         res.json({ message: `Already no have user!. Can't delete`, error });
     }
 });
-
-
-
 
 // *****
 // Blogs
@@ -148,9 +158,11 @@ app.get('/api/blog/:id', async (req, res) => {
 });
 
 // create blog
-app.post('/api/createblog', async (req, res) => {
-    const result = await BlogModel.create(req.body);
-    res.status(201).json(result);
+app.post('/api/createblog', upload.single('file'), async (req, res) => {
+    console.log(req.file);
+    // const result = await BlogModel.create(req.body);
+    res.status(201)
+    // .json(result);
 });
 
 // update blog

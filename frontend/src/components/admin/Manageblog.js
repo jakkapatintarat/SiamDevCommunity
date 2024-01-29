@@ -1,15 +1,49 @@
-import React, { useEffect, useState, } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import axios from 'axios';
 import isAuthorized from '../../utils/Adminisauthorized';
-import { redirect, useNavigate } from 'react-router-dom';
+import { Dialog, Transition } from '@headlessui/react'
 
 export default function Manageblog() {
   useEffect(() => {
-    const auth = isAuthorized()
-    // console.log(auth);
+    isAuthorized()
   }, []);
 
   const [blogs, setBlogs] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [blogData, setBlogData] = useState({
+    title: '',
+    content: '',
+    author: '',
+    file: null,
+  })
+
+  const handlefileChange = (e) => {
+    setBlogData({...blogData, file: e.target.files[0]})
+  }
+
+  const handleCreateBlog = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('title', blogData.title);
+    formData.append('content', blogData.content);
+    formData.append('author', blogData.author);
+    formData.append('file', blogData.file);
+
+    try {
+      // console.log(e);
+      const res = await axios.post(`http://localhost:5000/api/createblog`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log(res);
+      // setOpen(false);
+      // window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     // get data
@@ -22,75 +56,226 @@ export default function Manageblog() {
     <main className="pt-0 pl-72 ">
       <div>
         {/* Table */}
-        <div className="bg-gray-200 py-10">
-          <h2 className="px-4 text-base font-semibold leading-7 text-dark sm:px-6 lg:px-8">Manageblog</h2>
-          <table className="mt-6 w-full darkspace-nowrap text-left">
-            <colgroup>
-              <col className="w-full sm:w-4/12" />
-              <col className="lg:w-4/12" />
-              <col className="lg:w-2/12" />
-              <col className="lg:w-1/12" />
-              <col className="lg:w-1/12" />
-            </colgroup>
-            <thead className="border-b border-dark/10 text-sm leading-6 text-dark">
-              <tr>
-                <th scope="col" className="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">
-                  title
-                </th>
-                <th scope="col" className="hidden py-2 pl-0 pr-8 font-semibold sm:table-cell">
-                  content
-                </th>
-                <th scope="col" className="py-2 pl-0 pr-4 text-right font-semibold sm:pr-8 sm:text-left lg:pr-20">
-                  image
-                </th>
-                <th scope="col" className="hidden py-2 pl-0 pr-8 font-semibold md:table-cell lg:pr-20">
-                  author
-                </th>
-                <th scope="col" className="hidden py-2 pl-0 pr-4 text-right font-semibold sm:table-cell sm:pr-6 lg:pr-8">
-                  title
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-dark/5">
-              {blogs.map((blog) => (
-                <tr key={blog._id}>
-                  <td className="py-4 pl-4 pr-8 sm:pl-6 lg:pl-8">
-                    <div className="flex items-center gap-x-4">
-                      <img src={blog.title} alt="" className="h-8 w-8 rounded-full bg-gray-800" />
-                      <div className="truncate text-sm font-medium leading-6 text-dark">{blog.title}</div>
-                    </div>
-                  </td>
-                  <td className="hidden py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
-                    <div className="flex gap-x-3">
-                      <div className="font-mono text-sm leading-6 text-gray-400">{blog.title}</div>
-                      <div className="rounded-md bg-gray-700/40 px-2 py-1 text-xs font-medium text-gray-400 ring-1 ring-inset ring-dark/10">
-                        {blog.title}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">
-                    <div className="flex items-center justify-end gap-x-2 sm:justify-start">
-                      <time className="text-gray-400 sm:hidden" dateTime={blog.title}>
-                        {blog.title}
-                      </time>
-                      <div className='flex-none rounded-full p-1'>
-                        <div className="h-1.5 w-1.5 rounded-full bg-current" />
-                      </div>
-                      <div className="hidden text-dark sm:block">{blog.title}</div>
-                    </div>
-                  </td>
-                  <td className="hidden py-4 pl-0 pr-8 text-sm leading-6 text-gray-400 md:table-cell lg:pr-20">
-                    {blog.title}
-                  </td>
-                  <td className="hidden py-4 pl-0 pr-4 text-right text-sm leading-6 text-gray-400 sm:table-cell sm:pr-6 lg:pr-8">
-                    <time dateTime={blog.title}>{blog.title}</time>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="bg-gray-200">
+
+          <div className="px-4 sm:px-6 lg:px-8">
+            <div className="sm:flex sm:items-center">
+              <div className="sm:flex-auto mt-10">
+                <h1 className="text-base font-semibold leading-6 text-dark mb-3">Manage blogs</h1>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(true)}
+                className="block rounded-md bg-indigo-500 px-3 py-2 mt-20 text-center text-sm font-semibold text-dark hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              >
+                Add blog
+              </button>
+
+            </div>
+            <div className="mt-8 flow-root">
+              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <table className="min-w-full divide-y divide-gray-700">
+                    <thead>
+                      <tr>
+                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-dark sm:pl-0">
+                          Author
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark" hidden>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
+                          Title
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
+                          Content
+                        </th>
+
+                        <th scope="col" className="relative w-6/6 py-3.5 pl-3 pr-4 sm:pr-0">
+                          <span className="sr-only">Edit</span>
+                        </th>
+                        <th scope="col" className="relative w-6/6 py-3.5 pl-3 pr-4 sm:pr-0">
+                          <span className="sr-only">Edit</span>
+                        </th>
+                        <th scope="col" className="relative w-6/6 py-3.5 pl-3 pr-4 sm:pr-0">
+                          <span className="sr-only">delete</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-300">
+                      {blogs.map((blog) => (
+                        <tr key={blog._id}>
+                          <td className="darkspace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-dark sm:pl-0">
+                            {blog.author}
+                          </td>
+                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900" hidden></td>
+                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.title}</td>
+                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.content}</td>
+                          <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <button
+                              type="button"
+                              // onClick={() => handlevViewClick(user)}
+                              className="text-indigo-400 hover:text-indigo-600"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                              </svg>
+
+                            </button>
+                          </td>
+                          <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <button
+                              type="button"
+                              // onClick={() => handleEditClick(user)}
+                              className="text-indigo-400 hover:text-indigo-600"
+                            >
+                              Edit
+                            </button>
+                          </td>
+                          <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <button
+                              type="button"
+                              // onClick={() => handleDeleteClick(user._id)}
+                              className="text-red-400 hover:text-red-600"
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         {/* End Table */}
+
+        {/* modal เพิ่มบล็อค */}
+        <Transition.Root show={open} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={setOpen}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                      <form className="space-y-6" onSubmit={handleCreateBlog} encType='multipart/form-data' >
+                        <div>
+                          <label
+                            htmlFor="title"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Title
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="title"
+                              name="title"
+                              type="text"
+                              autoComplete="title"
+                              required
+                              onChange={(e) => setBlogData((prev) => ({ ...prev, title: e.target.value }))}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <label
+                              htmlFor="content"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Content
+                            </label>
+                          </div>
+                          <div className="mt-2">
+                            <input
+                              id="content"
+                              name="content"
+                              type="text"
+                              required
+                              onChange={(e) => setBlogData((prev) => ({ ...prev, content: e.target.value }))}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <label
+                              htmlFor="author"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Author
+                            </label>
+                          </div>
+                          <div className="mt-2">
+                            <input
+                              id="author"
+                              name="author"
+                              type="text"
+                              required
+                              onChange={(e) => setBlogData((prev) => ({ ...prev, author: e.target.value }))}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="file" className="block text-sm font-medium leading-6 text-gray-900">
+                            Upload File
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="file"
+                              name="file"
+                              type="file"
+                              onChange={handlefileChange}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <button
+                            type="submit"
+                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          >
+                            เพิ่มบล็อก
+                          </button>
+                        </div>
+
+                      </form>
+
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+        {/*จบ modal เพิ่มบล็อค */}
 
 
       </div>
