@@ -23,14 +23,17 @@ const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
 
 // file path / storage
+// ตั้งค่า Multer
 const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './frontend/public/images/');
+    destination: function (req, file, cb) {
+        cb(null, 'imgs/'); // กำหนดโฟลเดอร์ที่จะบันทึกไฟล์
     },
-    filename: function (req, file, callback) {
-        callback(null, file.originalname);
+    filename: function (req, file, cb) {
+        // console.log(file);
+        cb(null, Date.now() + '-' + req.body.author + '.jpg'); // กำหนดชื่อไฟล์
     }
 });
+
 
 // MiddleWare
 const upload = multer({ storage: storage });
@@ -158,11 +161,26 @@ app.get('/api/blog/:id', async (req, res) => {
 });
 
 // create blog
-app.post('/api/createblog', upload.single('file'), async (req, res) => {
-    console.log(req.file);
-    // const result = await BlogModel.create(req.body);
-    res.status(201)
-    // .json(result);
+app.post('/api/createblog', upload.single('img'), async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.file);
+    const title = req.body.title;
+    const content = req.body.content;
+    const author = req.body.author;
+    const img = 'http://localhost:5000/'+req.file.path;
+    const newBlogData = {
+        title,
+        content,
+        author,
+        img
+    }
+    const newBlog = new BlogModel(newBlogData);
+    try {
+        newBlog.save()
+        res.json('Blog Added')
+    } catch (error) {
+        res.json('Error: ' + error)
+    }
 });
 
 // update blog
@@ -188,6 +206,9 @@ app.delete('/api/delete/:id', async (req, res) => {
         res.json({ message: `Already no have blog!. Can't delete`, error });
     }
 });
+
+// Get Image
+app.use('/imgs', express.static(path.join(__dirname, 'imgs'))) // ทุก req ที่ขึ้นต้น /img express จะเข้าไปทำงานเกี่ยวกับไฟล์ใน folder imgs
 
 
 

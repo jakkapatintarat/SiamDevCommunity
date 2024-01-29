@@ -14,32 +14,26 @@ export default function Manageblog() {
     title: '',
     content: '',
     author: '',
-    file: null,
-  })
+    img: null,
+  });
 
   const handlefileChange = (e) => {
-    setBlogData({...blogData, file: e.target.files[0]})
+    setBlogData({ ...blogData, img: e.target.files[0] })
   }
 
-  const handleCreateBlog = async (e) => {
+  const createBlog = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
-    formData.append('title', blogData.title);
-    formData.append('content', blogData.content);
-    formData.append('author', blogData.author);
-    formData.append('file', blogData.file);
-
+    formData.append('title', blogData.title)
+    formData.append('content', blogData.content)
+    formData.append('author', blogData.author)
+    formData.append('img', blogData.img)
+    // console.log(blogData);
     try {
-      // console.log(e);
-      const res = await axios.post(`http://localhost:5000/api/createblog`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const res = await axios.post(`http://localhost:5000/api/createblog`, formData)
       console.log(res);
-      // setOpen(false);
-      // window.location.reload();
+      setOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -54,6 +48,12 @@ export default function Manageblog() {
 
   return (
     <main className="pt-0 pl-72 ">
+      {/* <form onSubmit={createBlog} encType='multipart-formdata'>
+        <input id="title" name='title' type='text' onChange={(e) => setBlogData((prev) => ({ ...prev, title: e.target.value }))} />
+        <input id="img" name="img" type="file" onChange={handlefileChange} />
+        <button type='submit'>
+          send</button>
+      </form> */}
       <div>
         {/* Table */}
         <div className="bg-gray-200">
@@ -81,7 +81,8 @@ export default function Manageblog() {
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-dark sm:pl-0">
                           Author
                         </th>
-                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark" hidden>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
+                          Image
                         </th>
                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-dark">
                           Title
@@ -107,7 +108,9 @@ export default function Manageblog() {
                           <td className="darkspace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-dark sm:pl-0">
                             {blog.author}
                           </td>
-                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900" hidden></td>
+                          <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">
+                            <img src={blog.img} alt={blog.title} style={{ maxWidth: '100px' }} />
+                          </td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.title}</td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.content}</td>
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
@@ -181,7 +184,7 @@ export default function Manageblog() {
                 >
                   <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                      <form className="space-y-6" onSubmit={handleCreateBlog} encType='multipart/form-data' >
+                      <form className="space-y-6" onSubmit={createBlog} encType='multipart/form-data' >
                         <div>
                           <label
                             htmlFor="title"
@@ -249,8 +252,8 @@ export default function Manageblog() {
                           </label>
                           <div className="mt-2">
                             <input
-                              id="file"
-                              name="file"
+                              id="img"
+                              name="img"
                               type="file"
                               onChange={handlefileChange}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
