@@ -137,7 +137,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 // find user by id
-app.get('/api/blog/:id', async (req, res) => {
+app.get('/api/user/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const userResult = await userModel.findById(userId);
