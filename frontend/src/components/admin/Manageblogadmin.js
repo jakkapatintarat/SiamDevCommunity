@@ -10,6 +10,7 @@ export default function ManageAdminBlog() {
 
   const [blogs, setBlogs] = useState([]);
   const [open, setOpen] = useState(false);
+  const [editModal, setEditmodal] = useState(false);
   //create form state
   const [blogData, setBlogData] = useState({
     title: '',
@@ -17,6 +18,13 @@ export default function ManageAdminBlog() {
     author: '',
     img: null,
   });
+  //edit form state
+  const [selectedBlog, setSelectedBlog] = useState({
+    title: '',
+    content: '',
+    author: '',
+    img: null,
+  })
 
   const handleDeleteClick = async (id) => {
     try {
@@ -26,6 +34,12 @@ export default function ManageAdminBlog() {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const handleEditClick = async (blog) => {
+    console.log(blog);
+    setSelectedBlog(blog);
+    setEditmodal(true);
   }
 
   const handlefileChange = (e) => {
@@ -142,7 +156,7 @@ export default function ManageAdminBlog() {
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"
-                              // onClick={() => handleEditClick(blog)}
+                              onClick={() => handleEditClick(blog)}
                               className="text-indigo-400 hover:text-indigo-600"
                             >
                               Edit
@@ -292,6 +306,172 @@ export default function ManageAdminBlog() {
           </Dialog>
         </Transition.Root>
         {/*จบ modal เพิ่มบล็อค */}
+
+        {/* modal แก้ไข */}
+        <Transition.Root show={editModal} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={setEditmodal}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                      <form className="space-y-6" encType='multipart/form-data'>
+                        <div>
+                          <label
+                            htmlFor="title"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Title
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="title"
+                              name="title"
+                              type="text"
+                              value={selectedBlog.title}
+                              required
+                              onChange={(e) => {
+                                // console.log('Username:', e.target.value);
+                                // อัปเดต state
+                                setSelectedBlog(prevUser => ({
+                                  ...prevUser,
+                                  title: e.target.value,
+                                }));
+                              }}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <label
+                              htmlFor="content"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Content
+                            </label>
+                          </div>
+                          <div className="mt-2">
+                            <textarea
+                              id="content"
+                              name="content"
+                              type="text"
+                              autoComplete="current-password"
+                              value={selectedBlog.content}
+                              required
+                              onChange={(e) => {
+                                // console.log('Username:', e.target.value);
+                                // อัปเดต state
+                                setSelectedBlog(prevUser => ({
+                                  ...prevUser,
+                                  content: e.target.value,
+                                }));
+                              }}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <label
+                              htmlFor="author"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Author
+                            </label>
+                          </div>
+                          <div className="mt-2">
+                            <input
+                              id="author"
+                              name="author"
+                              type="text"
+                              value={selectedBlog.author}
+                              autoComplete="current-password"
+                              required
+                              onChange={(e) => {
+                                // console.log('Username:', e.target.value);
+                                // อัปเดต state
+                                setSelectedBlog(prevUser => ({
+                                  ...prevUser,
+                                  author: e.target.value,
+                                }));
+                              }}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <label
+                              htmlFor="img"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Image
+                            </label>
+                          </div>
+                          <div className="mt-2">
+                            <input
+                              id="img"
+                              name="img"
+                              type="text"
+                              value={selectedBlog.img}
+                              autoComplete="current-password"
+                              required
+                              onChange={(e) => {
+                                // console.log('Username:', e.target.value);
+                                // อัปเดต state
+                                setSelectedBlog(prevUser => ({
+                                  ...prevUser,
+                                  img: e.target.value,
+                                }));
+                              }}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <img src={selectedBlog.img} style={{ maxWidth: '100%' }}/>
+                          </div>
+                        </div>
+                        <div>
+                          <button
+                            type="submit"
+                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          >
+                            แก้ไข
+                          </button>
+                        </div>
+                      </form>
+
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+        {/*จบ modal แก้ไข */}
 
 
       </div>

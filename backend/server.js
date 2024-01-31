@@ -150,8 +150,22 @@ app.get('/api/user/:id', async (req, res) => {
 
 // create
 app.post('/api/adduser', async (req, res) => {
-    await userModel.create(req.body);
-    res.status(201).json(req.body);
+    const { username, password, fname, lname, tel, email } = req.body
+    const user = await userModel.findOne({ username: username });
+    const mail = await userModel.findOne({ email: email });
+    if (!user) {
+        if (!mail) {
+            // ใช้ bcrypt hash รหัสผ่าน
+            const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
+            const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel, role: 'user' });
+            await newUser.save()
+            res.json({ newUser })
+        } else {
+            res.json({ message: 'email is already use' })
+        }
+    } else {
+        res.json({ message: 'username is already use' })
+    }
 });
 
 // update user

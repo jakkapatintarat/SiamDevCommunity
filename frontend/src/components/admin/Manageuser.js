@@ -19,6 +19,7 @@ export default function Manageuser() {
   const [telephone, setTelephone] = useState('');
   const [viewModal, setViewModal] = useState(false);
   const [editModal, setEditmodal] = useState(false);
+  const [message, setMessage] = useState('');
 
   // edit form state
   const [selectedUser, setSelectedUser] = useState({
@@ -35,18 +36,21 @@ export default function Manageuser() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/api/register", {
+      const res = await axios.post("http://localhost:5000/api/adduser", {
         username: username,
         password: password,
         fname: firstName,
         lname: lastName,
+        tel: telephone,
         email: email,
       });
-      const token = response.data.token;
-      localStorage.setItem('token', token);
-      setOpen(false)
+      if(res.data.message){
+        setMessage(res.data.message);
+      }else{
+        setOpen(false)
+      }
     } catch (error) {
-      console.error("Sign in failed", error);
+      console.error("add user failed", error);
     }
   };
 
@@ -372,6 +376,7 @@ export default function Manageuser() {
                             />
                           </div>
                         </div>
+                        {message && <p className='text-red-600 text-center'>{message}</p>}
 
                         <div>
                           <button
