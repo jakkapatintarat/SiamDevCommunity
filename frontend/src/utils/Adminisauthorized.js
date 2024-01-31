@@ -7,13 +7,13 @@ const isAuthorized = () => {
         // console.log(profile);
         const role = profile.role
         if (role !== "admin") {
-            window.location.href = '/login'
+            window.location.href = '/admin/login'
             return false
         } else {
             return true
         }
     } else {
-        window.location.href = '/login'
+        window.location.href = '/admin/login'
         return false
     }
 }

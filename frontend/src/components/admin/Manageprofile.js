@@ -1,6 +1,7 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import isAuthorized from '../../utils/Adminisauthorized';
 import { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function Manageprofile() {
     // Check Auth
@@ -9,7 +10,14 @@ export default function Manageprofile() {
         // console.log(auth);
     }, []);
 
+    const navigate = useNavigate();
     const [userData, setUserData] = useState([]);
+
+    // Logout
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/admin/login');
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -123,6 +131,15 @@ export default function Manageprofile() {
                     </div>
                 </form>
                 {/* End Form */}
+                <div className="mt-6 flex items-center justify-end gap-x-6">
+                    <button
+                        type="button"
+                        className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-rose-600 shadow-sm hover:bg-red-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </button>
+                </div>
             </div>
         </main>
     )

@@ -94,6 +94,7 @@ export default function Dashboard() {
           </dl>
         </div>
         {/* end card */}
+        
         {/* table */}
         <div className='mt-10'>
           <div className="rounded overflow-hidden shadow bg-white mx-2 w-full">
@@ -105,7 +106,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
         {/* end table */}
       </div>
     </main>

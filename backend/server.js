@@ -70,6 +70,37 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Login 
+app.post('/login/admin', async (req, res) => {
+    console.log(req);
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email: email })
+    // console.log(user);
+
+    if (user) {
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        // const isPasswordValid = 'TqfuEtjcpmxHpmP'
+        if (isPasswordValid) {
+            const { password, ...result } = user._doc;
+            // console.log(result.role);
+            if (result.role === 'admin') {
+                // console.log('u r admin');
+                //create token
+                const token = jwt.sign({ result }, 'secret', { expiresIn: '1h' });
+                res.send({ message: "login success", user: result, token });
+            } else {
+                // console.log('u r not admin');
+                res.status(401).send("you are not admin")
+            }
+
+        } else {
+            res.status(401).send("user name or password is not valid")
+        }
+    } else {
+        res.status(401).send("not register");
+    }
+});
+
 // Register
 app.post('/api/register', async (req, res) => {
     const { username, password, email, fname, lname, tel } = req.body;
@@ -167,7 +198,7 @@ app.post('/api/createblog', upload.single('img'), async (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const author = req.body.author;
-    const img = 'http://localhost:5000/'+req.file.path;
+    const img = 'http://localhost:5000/' + req.file.path;
     const newBlogData = {
         title,
         content,
