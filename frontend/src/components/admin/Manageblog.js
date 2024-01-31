@@ -10,6 +10,7 @@ export default function Manageblog() {
 
   const [blogs, setBlogs] = useState([]);
   const [open, setOpen] = useState(false);
+  //create form state
   const [blogData, setBlogData] = useState({
     title: '',
     content: '',
@@ -120,8 +121,8 @@ export default function Manageblog() {
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">
                             <img src={blog.img} alt={blog.title} style={{ maxWidth: '100px' }} />
                           </td>
-                          <td 
-                          className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.author}</td>
+                          <td
+                            className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.author}</td>
                           {/* <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.content}</td> */}
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{new Date(blog.create_at).toUTCString()}</td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{new Date(blog.update_at).toUTCString()}</td>
@@ -141,7 +142,7 @@ export default function Manageblog() {
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"
-                              // onClick={() => handleEditClick(user)}
+                              // onClick={() => handleEditClick(blog)}
                               className="text-indigo-400 hover:text-indigo-600"
                             >
                               Edit
