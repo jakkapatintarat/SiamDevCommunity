@@ -8,6 +8,7 @@ import Profile from "../components/user/Profile"
 import Register from "../components/user/Register"
 import Navbar from "../components/user/Navbar"
 import BlogDetail from "../components/user/BlogDetail"
+import CreateBlog from "../components/user/CreateBlog"
 
 export default function Web() {
     return (
@@ -22,6 +23,7 @@ export default function Web() {
             <Route path='/' element={<><Navbar/><Homepage/></>} />
             <Route path='/profile' element={<><Navbar/><Profile/></>} />
             <Route path='/register' element={<><Navbar/><Register/></>} />
+            <Route path='/createblog' element={<><Navbar/><CreateBlog/></>} />
         </Routes>
         </>
     )

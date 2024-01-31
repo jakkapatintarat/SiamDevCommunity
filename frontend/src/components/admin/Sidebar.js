@@ -14,6 +14,7 @@ const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon },
   { name: 'จัดการผู้ใช้', href: '/admin/manageuser', icon: UsersIcon },
   { name: 'จัดการบทความ', href: '/admin/manageblog', icon: FolderIcon },
+  { name: 'จัดการบทความของแอดมิน', href: '/admin/manageadminblog', icon: FolderIcon },
 ]
 
 function classNames(...classes) {

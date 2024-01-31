@@ -21,6 +21,7 @@ try {
 // Model
 const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
+const AdminBlogModel = require('./models/adminBlogSchema');
 
 // file path / storage
 // ตั้งค่า Multer
@@ -183,7 +184,7 @@ app.delete('/api/delete/user/:id', async (req, res) => {
 });
 
 // *****
-// Blogs
+// Blogs User 
 // API 
 // *****
 // All blogs
@@ -244,6 +245,74 @@ app.delete('/api/delete/:id', async (req, res) => {
     try {
         const blogId = req.params.id;
         const deletedBlog = await BlogModel.findByIdAndDelete(blogId);
+        res.json({ message: `delete ${blogId} success!`, deletedBlog });
+    } catch (error) {
+        res.json({ message: `Already no have blog!. Can't delete`, error });
+    }
+});
+
+// *****
+// Blogs Admin 
+// API 
+// *****
+// All blogs
+app.get('/api/adminblogs', async (req, res) => {
+    const allModels = await AdminBlogModel.find();
+    res.json(allModels).status(200);
+});
+
+// find blog by id
+app.get('/api/adminblog/:id', async (req, res) => {
+    try {
+        const blogId = req.params.id;
+        const blogResult = await AdminBlogModel.findById(blogId);
+        res.json(blogResult);
+    } catch (error) {
+        res.json({ message: 'no have this blog', error });
+    }
+});
+
+// create blog
+app.post('/api/createadminblog', upload.single('img'), async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.file);
+    const title = req.body.title;
+    const content = req.body.content;
+    const author = req.body.author;
+    const img = 'http://localhost:5000/' + req.file.path;
+    const newBlogData = {
+        title,
+        content,
+        author,
+        img,
+    }
+    const newBlog = new AdminBlogModel(newBlogData);
+    try {
+        newBlog.save()
+        res.json('Blog Added')
+    } catch (error) {
+        res.json('Error: ' + error)
+    }
+});
+
+// update blog
+app.patch('/api/updateadminblog/:id', async (req, res) => {
+    try {
+        const blogId = req.params.id;   // get param
+        const updateData = req.body;
+
+        const updateBlog = await AdminBlogModel.findByIdAndUpdate(blogId, updateData);
+        res.json({ message: `update ${blogId} success!`, updateBlog });
+    } catch (error) {
+        res.json({ message: `No have blog!. Can't update`, error });
+    }
+});
+
+// delete blog
+app.delete('/api/deleteadminblog/:id', async (req, res) => {
+    try {
+        const blogId = req.params.id;
+        const deletedBlog = await AdminBlogModel.findByIdAndDelete(blogId);
         res.json({ message: `delete ${blogId} success!`, deletedBlog });
     } catch (error) {
         res.json({ message: `Already no have blog!. Can't delete`, error });

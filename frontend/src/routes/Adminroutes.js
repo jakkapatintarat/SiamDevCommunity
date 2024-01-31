@@ -5,6 +5,7 @@ import Manageuser from "../components/admin/Manageuser";
 import Manageblog from "../components/admin/Manageblog";
 import LoginAdmin from "../components/admin/LoginAdmin";
 import Manageprofile from "../components/admin/Manageprofile";
+import ManageAdminBlog from "../components/admin/Manageblogadmin";
 export default function AdminRoutes() {
     return (
         <>
@@ -14,6 +15,7 @@ export default function AdminRoutes() {
             <Route path='/admin/login' element={<><LoginAdmin/></>} />
             <Route path='/admin/manageuser' element={<><Sidebar/><Manageuser/></>} />
             <Route path='/admin/manageblog' element={<><Sidebar/><Manageblog/></>} />
+            <Route path='/admin/manageadminblog' element={<><Sidebar/><ManageAdminBlog/></>} />
             <Route path='/admin/profile' element={<><Sidebar/><Manageprofile/></>} />
         </Routes>
         </>
