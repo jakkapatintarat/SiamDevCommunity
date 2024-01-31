@@ -136,6 +136,18 @@ app.get('/api/users', async (req, res) => {
     res.json(users).status(200);
 });
 
+// find user by id
+app.get('/api/blog/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const userResult = await userModel.findById(userId);
+        res.json(userResult);
+    } catch (error) {
+        res.json({ message: 'no have this user', error });
+    }
+});
+
+// create
 app.post('/api/adduser', async (req, res) => {
     await userModel.create(req.body);
     res.status(201).json(req.body);
