@@ -6,9 +6,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
+const http = require('http');
+const socketIO = require('socket.io');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const server = http.createServer(app); // สร้าง server โดยให้ socke.io มาใช้งานร่วมกับ express
+const io = socketIO(server);
 
 // เชื่อมต่อฐานข้อมูล
 const databaseUrl = 'mongodb://127.0.0.1:27017/SiamDev';
@@ -18,6 +22,25 @@ try {
 } catch (error) {
     console.log(error);
 }
+
+// socket.io connection
+// รับ event connection เมื่อ client มีการเข้า path
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    socket.on('message', (message) => {
+        console.log('Resived message', message);
+        io.emit('message', message);
+    });
+
+    // รับ event disconnect
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+
+
 // Model
 const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
@@ -342,6 +365,6 @@ app.use('/imgs', express.static(path.join(__dirname, 'imgs'))) // ทุก req 
 
 
 //start server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
 });
