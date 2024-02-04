@@ -6,13 +6,21 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
-const http = require('http');
-const socketIO = require('socket.io');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const server = http.createServer(app); // สร้าง server โดยให้ socke.io มาใช้งานร่วมกับ express
-const io = socketIO(server);
+const server = createServer(app); // สร้าง server โดยให้ socke.io มาใช้งานร่วมกับ express
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000"
+    }
+});
+
+// MiddleWare
+app.use(bodyParser.json()); // แปลง req ให้เป็น json
+app.use(cors()); // ตัวแก้ไม่ให้ติด cors header เมื่อ req ส่งมา
 
 // เชื่อมต่อฐานข้อมูล
 const databaseUrl = 'mongodb://127.0.0.1:27017/SiamDev';
@@ -24,8 +32,8 @@ try {
 }
 
 // socket.io connection
-// รับ event connection เมื่อ client มีการเข้า path
-io.on('connection', (socket) => {
+// รับ connect เมื่อ client มีการเข้าเว็บ
+io.on('connect', (socket) => {
     console.log('A user connected');
 
     socket.on('message', (message) => {
@@ -57,13 +65,7 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + req.body.author + '.jpg'); // กำหนดชื่อไฟล์
     }
 });
-
-
-// MiddleWare
 const upload = multer({ storage: storage });
-app.use(bodyParser.json()); // แปลง req ให้เป็น json
-app.use(cors()); // ตัวแก้ไม่ให้ติด cors header เมื่อ req ส่งมา
-
 
 // *****
 // API Route
