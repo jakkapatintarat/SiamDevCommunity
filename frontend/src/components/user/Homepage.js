@@ -1,38 +1,25 @@
-import React from 'react'
-import isAuthenticated from '../../utils/AuthAPI'
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 export default function Homepage() {
-  isAuthenticated();
-  if(!isAuthenticated) return <div>Access Denied</div>
-  const products = [
-    {
-      id: 1,
-      name: 'บทช่วยสอน React',
-      color: 'ปูพื้นฐานกันหน่อยวัยรุ่น',
-      price: '$10000',
-      href: '#',
-      imageSrc: 'https://miro.medium.com/v2/resize:fit:2000/1*y6C4nSvy2Woe0m7bWEn4BA.png',
-      imageAlt: 'Hand stitched, orange leather long wallet.',
-    },
-    {
-      id: 2,
-      name: 'บทช่วยสอน React',
-      color: 'ปูพื้นฐานกันหน่อยวัยรุ่น',
-      price: '$10000',
-      href: '#',
-      imageSrc: 'https://miro.medium.com/v2/resize:fit:2000/1*y6C4nSvy2Woe0m7bWEn4BA.png',
-      imageAlt: 'Hand stitched, orange leather long wallet.',
-    },
-    {
-      id: 3,
-      name: 'บทช่วยสอน React',
-      color: 'ปูพื้นฐานกันหน่อยวัยรุ่น',
-      price: '$10000',
-      href: '#',
-      imageSrc: 'https://miro.medium.com/v2/resize:fit:2000/1*y6C4nSvy2Woe0m7bWEn4BA.png',
-      imageAlt: 'Hand stitched, orange leather long wallet.',
-    },
-  ]
+  const [blogs, setBlogs] = useState([]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/adminblogs');
+        console.log(response.data);
+        setBlogs(response.data);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+ 
+
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -42,23 +29,22 @@ export default function Homepage() {
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
-          {products.map((product) => (
-            <div key={product.id} className="group relative">
+          {blogs.map((blog) => (
+            <div key={blog.id} className="group relative">
               <div className="h-56 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-72 xl:h-80">
                 <img
-                  src={product.imageSrc}
-                  alt={product.imageAlt}
+                  src={blog.img}
                   className="h-full w-full object-cover object-center"
                 />
               </div>
               <h3 className="mt-4 text-sm text-gray-700">
-                <a href={product.href}>
+                <a href={blog.href}>
                   <span className="absolute inset-0" />
-                  {product.name}
+                  {blog.title}
                 </a>
               </h3>
-              <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-              <p className="mt-1 text-sm font-medium text-gray-900">{product.price}</p>
+              <p className="mt-1 text-sm text-gray-500">{blog.content}</p>
+              <p className="mt-1 text-sm font-medium text-gray-900">{blog.author}</p>
             </div>
           ))}
         </div>

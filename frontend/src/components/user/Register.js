@@ -25,6 +25,7 @@ export default function Register() {
                 password: password,
                 fname: firstName,
                 lname: lastName,
+                tel: telephone,
                 email: email,
             });
             const token = response.data.token;
