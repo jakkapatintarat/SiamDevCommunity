@@ -33,15 +33,18 @@ try {
 
 // socket.io connection
 // รับ connect เมื่อ client มีการเข้าเว็บ
-io.on('connect', (socket) => {
-    console.log('A user connected');
+io.on('connection', (socket) => {
+    console.log(`Socket ${socket.id} connected`);
 
-    socket.on('message', (message) => {
-        console.log('Resived message', message);
+    // resive message from client
+    socket.on('sendMessage', (message) => {
+        // console.log('Resived message', message);
+
+        // send message to client
         io.emit('message', message);
     });
 
-    // รับ event disconnect
+    // // รับ event disconnect
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
