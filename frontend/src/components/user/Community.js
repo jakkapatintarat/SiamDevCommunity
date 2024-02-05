@@ -5,52 +5,41 @@ import { io } from 'socket.io-client';
 const socket = io('http://localhost:5000');
 
 export default function Community() {
-  useEffect(() => {
-    socket.connect();
+  const [message, setMessage] = useState('');
 
-    return () => {
-      socket.disconnect();
-    }
+  useEffect(() => { // recieve message from server
+    socket.on('message', (data) => {
+      console.log('recieve message', data);
+    })
   }, []);
-  // const [socket, setSocket] = useState(null);
-  // const [messages, setMessages] = useState([]);
-  // const [newMessage, setNewMessage] = useState('');
 
-  // useEffect(() => {
-  //   const newSocket = io('http://localhost:5000');
-  //   setSocket(newSocket);
-
-  //   return () => {
-  //     newSocket.disconnect();
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on('message', (message) => {
-  //       setMessages((prevMessages) => [...prevMessages, message]);
-  //     });
-  //   }
-  // }, [socket]);
-
-  // const sendMessage = () => {
-  //   if (socket && newMessage.trim() !== '') {
-  //     socket.emit('message', newMessage);
-  //     setNewMessage('');
-  //   }
-  // }
-
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    socket.emit('sendMessage', {message});  // send message to server
+    console.log('send message',message);
+    setMessage('');
+  }
   return (
     <>
       <div>
         <div className="lg:pl-20 border-3 border-gray-950 w-full">
-
-
-
           <main className="xl:pl-96 ">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 ">
               <div className="border-2 border-black p-96">
-                <h1>message</h1>
+
+
+
+
+                <form onSubmit={handelSubmit}>
+                  <input type="text" className="border-2 border-black" value={message} onChange={(e) => setMessage(e.target.value)}/>
+                  <button type="submit">Send</button>
+                </form>
+
+
+
+
+
+
               </div>
             </div>
           </main>
