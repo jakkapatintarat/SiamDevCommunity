@@ -6,10 +6,12 @@ const socket = io('http://localhost:5000');
 
 export default function Community() {
   const [message, setMessage] = useState('');
+  const [chat, setChat] = useState([]);
 
   useEffect(() => { // recieve message from server
     socket.on('message', (data) => {
       console.log('recieve message', data);
+      setChat([...chat, data.message]);
     })
   }, []);
 
