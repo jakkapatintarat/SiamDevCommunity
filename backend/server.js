@@ -34,12 +34,11 @@ try {
 // socket.io connection
 // รับ connect เมื่อ client มีการเข้าเว็บ
 io.on('connection', (socket) => {
-    // console.log(`Socket ${socket.id} connected`);
-    
-    socket.on('sendMessage', (message) => { // recieve message from client
-        console.log('Resived message', message);
-        
-        socket.broadcast.emit('serverSend', message);   // send message to client
+    console.log(`Socket ${socket.id} connected`);
+    socket.on('sendMessage', (data) => { // recieve message from client
+        console.log('Resived message', data);
+
+        socket.broadcast.emit('serverSend', data);   // send message to client
     });
 });
 

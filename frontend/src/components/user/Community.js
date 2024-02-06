@@ -2,27 +2,26 @@ import React, { useEffect, useState } from "react"
 // import io from "socket.io-client"
 import { io } from 'socket.io-client';
 
+var socket = io('http://localhost:5000');
 export default function Community() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
 
   useEffect(() => { // recieve message from server
-    const socket = io('http://localhost:5000');
-
     socket.on('serverSend', (data) => {
       console.log('recieve message', data);
-      // setChat([...chat, data.message]);
-    })
+      setChat(prevMessage => [...prevMessage, data.message]);
+    });
   }, []);
 
   const handelSubmit = (e) => {
     e.preventDefault();
-    const socket = io('http://localhost:5000');
-
-    socket.emit('sendMessage', {message});  // send message to server
-    console.log('send message',message);
+    socket.emit('sendMessage', { message });  // send message to server
+    console.log('send message', message);
+    setChat(prevMessage => [...prevMessage,  `You: ${message}`]);
     setMessage('');
   }
+
   return (
     <>
       <div>
@@ -30,12 +29,9 @@ export default function Community() {
           <main className="xl:pl-96 ">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 ">
               <div className="border-2 border-black p-96">
-
-
-
-
+                {chat.map((message, index) => (<li key={index}>{message}</li>))}
                 <form onSubmit={handelSubmit}>
-                  <input type="text" className="border-2 border-black" value={message} onChange={(e) => setMessage(e.target.value)}/>
+                  <input type="text" className="border-2 border-black" value={message} onChange={(e) => setMessage(e.target.value)} />
                   <button type="submit">Send</button>
                 </form>
 
