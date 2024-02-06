@@ -2,21 +2,23 @@ import React, { useEffect, useState } from "react"
 // import io from "socket.io-client"
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
-
 export default function Community() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
 
   useEffect(() => { // recieve message from server
-    socket.on('message', (data) => {
+    const socket = io('http://localhost:5000');
+
+    socket.on('serverSend', (data) => {
       console.log('recieve message', data);
-      setChat([...chat, data.message]);
+      // setChat([...chat, data.message]);
     })
   }, []);
 
   const handelSubmit = (e) => {
     e.preventDefault();
+    const socket = io('http://localhost:5000');
+
     socket.emit('sendMessage', {message});  // send message to server
     console.log('send message',message);
     setMessage('');

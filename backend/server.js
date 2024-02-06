@@ -35,18 +35,11 @@ try {
 // รับ connect เมื่อ client มีการเข้าเว็บ
 io.on('connection', (socket) => {
     // console.log(`Socket ${socket.id} connected`);
-    // resive message from client
-    socket.on('sendMessage', (message) => {
-        // console.log('Resived message', message);
-
-        // send message to client
-        // socket.broadcast.emit("message from server", message);
-        io.emit('message', message);
-    });
-
-    // // รับ event disconnect
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
+    
+    socket.on('sendMessage', (message) => { // recieve message from client
+        console.log('Resived message', message);
+        
+        socket.broadcast.emit('serverSend', message);   // send message to client
     });
 });
 
