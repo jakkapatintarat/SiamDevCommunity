@@ -9,6 +9,7 @@ import Register from "../components/user/Register"
 import Navbar from "../components/user/Navbar"
 import BlogDetail from "../components/user/BlogDetail"
 import CreateBlog from "../components/user/CreateBlog"
+import BlogAdminDetail from "../components/user/BlogAdminDetail"
 
 export default function Web() {
     return (
@@ -21,9 +22,11 @@ export default function Web() {
             <Route path='/blogs/:blogId' element={<><Navbar/><BlogDetail/></>} />
             <Route path='/community' element={<><Navbar/><Community/></>} />
             <Route path='/' element={<><Navbar/><Homepage/></>} />
+            <Route path='/blogsadmin/:blogId' element={<><Navbar/><BlogAdminDetail/></>} />
             <Route path='/profile' element={<><Navbar/><Profile/></>} />
             <Route path='/register' element={<><Navbar/><Register/></>} />
             <Route path='/createblog' element={<><Navbar/><CreateBlog/></>} />
+            <Route path='/blogsadmin:blogId' element={<><Navbar/><CreateBlog/></>} />
         </Routes>
         </>
     )

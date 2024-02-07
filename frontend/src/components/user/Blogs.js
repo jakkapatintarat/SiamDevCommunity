@@ -57,9 +57,9 @@ export default function Blogs() {
               </div>
             </form>
           </div>
-          <div className="md:flex md:items-center md:justify-between">
+          <div className="md:flex flex-g md:items-center md:justify-between">
             <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-              Trending products
+              Community Blogs
             </h2>
             <a
               href="/createblog"

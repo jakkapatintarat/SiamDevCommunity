@@ -24,7 +24,7 @@ export default function Homepage() {
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Trending products</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Admin Blogs</h2>
      
         </div>
 
@@ -38,7 +38,7 @@ export default function Homepage() {
                 />
               </div>
               <h3 className="mt-4 text-sm text-gray-700">
-                <a href={blog.href}>
+              <a href={`blogsadmin/${blog._id}`}>
                   <span className="absolute inset-0" />
                   {blog.title}
                 </a>
