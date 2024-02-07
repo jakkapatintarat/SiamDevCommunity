@@ -37,8 +37,13 @@ io.on('connection', (socket) => {
     console.log(`Socket ${socket.id} connected`);
     socket.on('sendMessage', (data) => { // recieve message from client
         console.log('Resived message', data);
+        
+        const serverChat = {
+            text: data.message,
+            isChatOwner: false,
+        }
 
-        socket.broadcast.emit('serverSend', data);   // send message to client
+        socket.broadcast.emit('serverSend', serverChat);   // send message to client
     });
 });
 
