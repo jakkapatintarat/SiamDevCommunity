@@ -35,7 +35,7 @@ try {
 // socket.io connection
 // รับ connect เมื่อ client มีการเข้าเว็บ
 io.on('connection', (socket) => {
-    console.log(`Socket ${socket.id} connected`);
+    // console.log(`Socket ${socket.id} connected`);
     socket.on('sendMessage', (data) => { // recieve message from client
         console.log('Resived message', data);
         

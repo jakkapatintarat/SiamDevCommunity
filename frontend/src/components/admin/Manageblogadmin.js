@@ -11,6 +11,8 @@ export default function ManageAdminBlog() {
   const [blogs, setBlogs] = useState([]);
   const [open, setOpen] = useState(false);
   const [editModal, setEditmodal] = useState(false);
+  const [viewModal, setViewModal] = useState(false);
+  const [viewBlog, setViewBlog] = useState([]);
   //create form state
   const [blogData, setBlogData] = useState({
     title: '',
@@ -25,6 +27,11 @@ export default function ManageAdminBlog() {
     author: '',
     img: null,
   })
+
+  const handleViewClick = (blog) => {
+    setViewBlog(blog);
+    setViewModal(true);
+  }
 
   const handleDeleteClick = async (id) => {
     try {
@@ -143,7 +150,7 @@ export default function ManageAdminBlog() {
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"
-                              // onClick={() => handlevViewClick(user)}
+                              onClick={() => handleViewClick(blog)}
                               className="text-indigo-400 hover:text-indigo-600"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -241,11 +248,13 @@ export default function ManageAdminBlog() {
                               Content
                             </label>
                           </div>
-                          <div className="mt-2">
-                            <input
+                          <div className='mt-2'>
+                            <textarea
+                              rows={8}
                               id="content"
                               name="content"
                               type="text"
+                              autoComplete="current-password"
                               required
                               onChange={(e) => setBlogData((prev) => ({ ...prev, content: e.target.value }))}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -284,6 +293,7 @@ export default function ManageAdminBlog() {
                               type="file"
                               onChange={handlefileChange}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              required
                             />
                           </div>
                         </div>
@@ -374,7 +384,7 @@ export default function ManageAdminBlog() {
                           </div>
                           <div className="mt-2">
                             <textarea
-                            rows={8}
+                              rows={8}
                               id="content"
                               name="content"
                               type="text"
@@ -452,7 +462,7 @@ export default function ManageAdminBlog() {
                             />
                           </div>
                           <div className="mt-2">
-                            <img src={selectedBlog.img} style={{ maxWidth: '100%' }}/>
+                            <img src={selectedBlog.img} style={{ maxWidth: '100%' }} />
                           </div>
                         </div>
                         <div>
@@ -473,6 +483,48 @@ export default function ManageAdminBlog() {
           </Dialog>
         </Transition.Root>
         {/*จบ modal แก้ไข */}
+
+        {/* modal ดูรายระเอียด */}
+        <Transition.Root show={viewModal} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={setViewModal}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full w-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative  bg-gradient-to-r bg-dark transform overflow-hidden rounded-lg  bg-white dark:bg-slate-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                    <div className=" text-center text-white">
+                      <h1 className='text-xl mb-2 underline decoration-solid'>Title: {viewBlog.title}</h1>
+                      <h1 className='text-xs mb-2 '>Author: {viewBlog.author}</h1>
+                      <img class="h-auto mb-3 max-w-full rounded-lg" src={viewBlog.img} />
+                      <h1 className='text-xs mb-2 '>{viewBlog.content}</h1>
+                    </div>
+                    <h1 className='text-wrap text-xs mb-2 text-slate-300'>Create_At: {new Date(viewBlog.create_at).toUTCString()}</h1>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+        {/* ดู modal ดูรายระเอียด */}
 
 
       </div>
