@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 console.log("test");
 
@@ -10,7 +10,8 @@ export default function CreateBlog() {
     img: null,
   });
 
-  const handlefileChange = (e) => {
+
+  const handleFileChange = (e) => {
     setBlogData({ ...blogData, img: e.target.files[0] })
   }
 
@@ -21,7 +22,6 @@ export default function CreateBlog() {
     formData.append('content', blogData.content)
     formData.append('author', blogData.author)
     formData.append('img', blogData.img)
-    //ดอน ไม่ใส่รูปภาพแล้วเซิฟแตก
     try {
       const res = await axios.post(`http://localhost:5000/api/createblog`, formData)
       console.log(res);
@@ -43,7 +43,7 @@ export default function CreateBlog() {
             ย้อนกลับ
           </a>
         </div>
-        <form 
+        <form
           className="space-y-6"
           onSubmit={createBlog}
           enctype="multipart/form-data"
@@ -56,6 +56,7 @@ export default function CreateBlog() {
               id="title"
               name="title"
               type="text"
+              required
               autoComplete="title"
               onChange={(e) => {
                 console.log('New title:', e.target.value);
@@ -75,6 +76,7 @@ export default function CreateBlog() {
             <textarea
               id="content"
               type="textarea"
+              required
               onChange={(e) => {
                 console.log('New content:', e.target.value);
                 setBlogData((prev) => ({ ...prev, content: e.target.value }))
@@ -112,13 +114,18 @@ export default function CreateBlog() {
                       id="file-upload"
                       name="file-upload"
                       type="file"
-                      onChange={handlefileChange}
+                      accept=".png, .jpg, .jpeg"
+                      required
+                      onChange={handleFileChange}
                       className="sr-only"
                     />
                   </label>
                   <p className="pl-1 text-white">or drag and drop</p>
                 </div>
                 <p className="text-xs text-white">PNG, JPG, GIF up to 10MB</p>
+                {blogData.img && (
+                  <img  className=" w-96" src={URL.createObjectURL(blogData.img)} alt="Selected Image" />
+                )}
               </div>
             </div>
           </div>
