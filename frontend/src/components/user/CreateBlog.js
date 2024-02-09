@@ -10,29 +10,28 @@ export default function CreateBlog() {
     img: null,
   });
 
-  const test = () => {
-    console.log("test");
-  };
+  const handlefileChange = (e) => {
+    setBlogData({ ...blogData, img: e.target.files[0] })
+  }
 
   const createBlog = async (e) => {
     e.preventDefault();
-    console.log(blogData);
-    const htmlFormData = new htmlFormData();
-    htmlFormData.append("title", blogData.title);
-    htmlFormData.append("content", blogData.content);
-    htmlFormData.append("author", blogData.author);
-    htmlFormData.append("img", blogData.img);
-    // console.log(blogData);
+    const formData = new FormData();
+    formData.append('title', blogData.title)
+    formData.append('content', blogData.content)
+    formData.append('author', blogData.author)
+    formData.append('img', blogData.img)
+    //ดอน ไม่ใส่รูปภาพแล้วเซิฟแตก
     try {
-      const res = await axios.post(
-        `http://localhost:5000/api/createadminblog`,
-        htmlFormData
-      );
+      const res = await axios.post(`http://localhost:5000/api/createblog`, formData)
       console.log(res);
+      alert("สร้างสำเร็จ")
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
-  };
+  }
+
   return (
     <>
       <div className="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 mt-20">
@@ -44,9 +43,10 @@ export default function CreateBlog() {
             ย้อนกลับ
           </a>
         </div>
-        <form
+        <form 
           className="space-y-6"
-          onSubmit={test}
+          onSubmit={createBlog}
+          enctype="multipart/form-data"
         >
           <div>
             <label className="text-white dark:text-gray-200" htmlFor="username">
@@ -57,9 +57,10 @@ export default function CreateBlog() {
               name="title"
               type="text"
               autoComplete="title"
-              onChange={(e) =>
+              onChange={(e) => {
+                console.log('New title:', e.target.value);
                 setBlogData((prev) => ({ ...prev, title: e.target.value }))
-              }
+              }}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>
@@ -72,8 +73,12 @@ export default function CreateBlog() {
               รายละเอียด
             </label>
             <textarea
-              id="textarea"
+              id="content"
               type="textarea"
+              onChange={(e) => {
+                console.log('New content:', e.target.value);
+                setBlogData((prev) => ({ ...prev, content: e.target.value }))
+              }}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             ></textarea>
           </div>
@@ -107,6 +112,7 @@ export default function CreateBlog() {
                       id="file-upload"
                       name="file-upload"
                       type="file"
+                      onChange={handlefileChange}
                       className="sr-only"
                     />
                   </label>
