@@ -21,6 +21,7 @@ const seedUsers = () => ({
     lname: faker.person.lastName(),
     tel: faker.phone.number(),
     role: 'user',
+    img: faker.image.avatar(),
 });
 
 const seedAdmins = () => ({
@@ -31,6 +32,7 @@ const seedAdmins = () => ({
     lname: faker.person.lastName(),
     tel: faker.phone.number(),
     role: 'admin',
+    img: faker.image.avatar(),
 });
 
 const Admin = {
@@ -75,9 +77,10 @@ const seedAdmin = async () => {
             lname: 'Community',
             tel: '0841085111',
             role: 'admin',
+            img: faker.image.avatar(),
         }
         const hashedPassword = await brypt.hash('1234', 10);
-        const newUser = new userModel({ username: Admin.username, password: hashedPassword, email: Admin.email, fname: Admin.fname, lname: Admin.lname, tel: Admin.tel, role: Admin.role });
+        const newUser = new userModel({ username: Admin.username, password: hashedPassword, email: Admin.email, fname: Admin.fname, lname: Admin.lname, tel: Admin.tel, role: Admin.role, img: Admin.img });
         await newUser.save()
         console.log('SiamDev Admin seeded successfully');
     } catch (error) {

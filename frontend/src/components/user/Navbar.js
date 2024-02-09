@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
@@ -17,6 +17,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const [profile, setProfile] = useState({});
 
   
   const navigate = useNavigate();
@@ -26,6 +27,15 @@ export default function Navbar() {
   }
 
   const isAuthenticatedUser = isAuthenticated();
+
+  useEffect(() => {
+    if(isAuthenticatedUser === true){
+      const userData = localStorage.getItem("token");
+      const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
+      const data = decodedPayload.result || decodedPayload;
+      setProfile(data);
+    }
+  }, []);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -84,7 +94,7 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://scontent.fhdy3-1.fna.fbcdn.net/v/t1.18169-9/12118729_1512956029017311_8797002292308185755_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=7a1959&_nc_eui2=AeFfHuX9CN1RsrUmfPb7MM9M8VrC0FAg18vxWsLQUCDXyyXgiaooK6xUe8KYVrUF-5M-t0a5q3Vkrvf1-cyuvwQo&_nc_ohc=fyMvOPE5gIUAX9QNLGR&_nc_ht=scontent.fhdy3-1.fna&oh=00_AfB0-RhDOJxyo-xnMYGVwUa4qUg7lYue__dr-6PS5QKmyw&oe=65D9EF8B"
+                        src={profile.img}
                         alt=""
                       />
                     </Menu.Button>
