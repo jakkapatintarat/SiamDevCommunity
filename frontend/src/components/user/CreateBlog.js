@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-console.log("test");
+
 
 export default function CreateBlog() {
   const [blogData, setBlogData] = useState({
@@ -11,6 +11,12 @@ export default function CreateBlog() {
   });
 
 
+
+  const userData = localStorage.getItem("token");
+  const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
+  const profile = decodedPayload.result || decodedPayload;
+  console.log(profile);
+
   const handleFileChange = (e) => {
     setBlogData({ ...blogData, img: e.target.files[0] })
   }
@@ -20,7 +26,7 @@ export default function CreateBlog() {
     const formData = new FormData();
     formData.append('title', blogData.title)
     formData.append('content', blogData.content)
-    formData.append('author', blogData.author)
+    formData.append('author', profile.username)
     formData.append('img', blogData.img)
     try {
       const res = await axios.post(`http://localhost:5000/api/createblog`, formData)
