@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     lname: String,
     tel: String,
     role: String,
+    img: String,
     create_at: {
         type: Date,
         default: Date.now(),

@@ -8,6 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const { faker } = require('@faker-js/faker');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -131,10 +132,11 @@ app.post('/login/admin', async (req, res) => {
 app.post('/api/register', async (req, res) => {
     const { username, password, email, fname, lname, tel } = req.body;
     const user = await userModel.findOne({ username: username });
+    const avatar = faker.image.avatar();
     if (!user) {
         // ใช้ bcrypt hash รหัสผ่าน
         const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
-        const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel, role: 'user' });
+        const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel, role: 'user', img: avatar });
         await newUser.save()
 
         const payloadToken = {
@@ -178,11 +180,12 @@ app.post('/api/adduser', async (req, res) => {
     const { username, password, fname, lname, tel, email } = req.body
     const user = await userModel.findOne({ username: username });
     const mail = await userModel.findOne({ email: email });
+    const avatar = faker.image.avatar();
     if (!user) {
         if (!mail) {
             // ใช้ bcrypt hash รหัสผ่าน
             const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
-            const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel, role: 'user' });
+            const newUser = new userModel({ username, password: hashedPassword, email, fname, lname, tel, role: 'user', img: avatar });
             await newUser.save()
             res.json({ newUser })
         } else {
@@ -198,9 +201,11 @@ app.patch('/api/user/update/:id', async (req, res) => {
     try {
         const userId = req.params.id;   // get param
         const updateData = req.body;
+        const {username, password, email, fname, lname, tel} = req.body;
         console.log(updateData);
+        const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
 
-        const updateUser = await userModel.findByIdAndUpdate(userId, updateData);
+        const updateUser = await userModel.findByIdAndUpdate(userId, {username, password:hashedPassword, email, fname, lname, tel});
         if (updateUser) {
             res.json({ message: `update ${userId} success!`, updateUser });
         } else (err) => {

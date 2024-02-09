@@ -1,27 +1,27 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
 
 export default function Profile() {
   const [editModal, setEditmodal] = useState(false);
+  // ดึงข้อมูลผู้ใช้
+  const userData = localStorage.getItem("token");
+  const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
+  const profile = decodedPayload.result || decodedPayload;
   const [user, setUser] = useState({
-    _id: '',
-    username: '',
+    username: profile.username,
     password: '',
-    email: '',
+    email: profile.email,
     fname: '',
     lname: '',
     tel: '',
   });
 
-  // ดึงข้อมูลผู้ใช้
-  const userData = localStorage.getItem("token");
-  const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
-  const profile = decodedPayload.result || decodedPayload;
-
   const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log(user);
+    const res = await axios.patch(`http://localhost:5000/api/user/update/${profile._id}`, user);
+    console.log(res);
+
   }
   const handleEditClick = async () => {
     setEditmodal(true);
@@ -34,7 +34,7 @@ export default function Profile() {
           <div className="text-center my-4">
             <img
               className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4"
-              src="https://randomuser.me/api/portraits/women/21.jpg"
+              src={profile.img}
               alt=""
             />
             <div className="py-2">
@@ -60,13 +60,13 @@ export default function Profile() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"
               />
             </svg>
@@ -87,13 +87,13 @@ export default function Profile() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
               />
             </svg>
@@ -109,13 +109,13 @@ export default function Profile() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"
               />
             </svg>

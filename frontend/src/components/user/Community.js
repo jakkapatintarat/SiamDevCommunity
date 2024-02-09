@@ -1,12 +1,25 @@
 import React, { useEffect, useState, useRef } from "react"
 // import io from "socket.io-client"
 import { io } from 'socket.io-client';
+import isAuthenticated from "../../utils/AuthAPI";
 
 var socket = io('http://localhost:5000');
 export default function Community() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
   const chatContainerRef = useRef(null);
+  const [profile, setProfile] = useState({});
+
+  const isAuthenticatedUser = isAuthenticated();
+
+  useEffect(() => {
+    if (isAuthenticatedUser === true) {
+      const userData = localStorage.getItem("token");
+      const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
+      const data = decodedPayload.result || decodedPayload;
+      setProfile(data);
+    }
+  }, []);
 
   useEffect(() => { // recieve message from server
     socket.on('serverSend', (data) => {
@@ -82,9 +95,9 @@ export default function Community() {
               className={`py-2 flex flex-row w-full ${message.isChatOwner ? "justify-end" : "justify-start"
                 }`}
             >
-              <div className={`${message.isChatOwner ? "order-2" : "order-1"}`}>
-                {/* <Avatar /> */}
-                Avatar
+              <div className={`text-sm ${message.isChatOwner ? "order-2" : "order-1"}`}>
+                <img src="https://img.icons8.com/?size=50&id=RbMAQFyq6YZQ&format=png" />
+                {/* Anonymous */}
               </div>
               <div
                 className={`px-2 w-fit py-3 flex flex-col bg-purple-500 rounded-lg text-white ${message.isChatOwner ? "order-1 mr-2" : "order-2 ml-2"
