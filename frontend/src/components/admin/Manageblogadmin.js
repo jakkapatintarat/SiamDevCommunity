@@ -374,6 +374,7 @@ export default function ManageAdminBlog() {
                           </div>
                           <div className="mt-2">
                             <textarea
+                            rows={8}
                               id="content"
                               name="content"
                               type="text"

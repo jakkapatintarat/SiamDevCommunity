@@ -129,7 +129,7 @@ export default function Manageblog() {
                           <td className="relative darkspace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"
-                              // onClick={() => handlevViewClick(user)}
+                              onClick={() => handlevViewClick(blog)}
                               className="text-indigo-400 hover:text-indigo-600"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">

@@ -146,6 +146,7 @@ app.post('/api/register', async (req, res) => {
             lname: newUser.lname,
             tel: newUser.tel,
             role: newUser.role,
+            img: newUser.img,
         }
         const token = jwt.sign(payloadToken, 'secret', { expiresIn: '1h' });
         res.json({ newUser, token });
