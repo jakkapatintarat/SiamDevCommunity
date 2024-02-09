@@ -37,7 +37,7 @@ try {
 io.on('connection', (socket) => {
     // console.log(`Socket ${socket.id} connected`);
     socket.on('sendMessage', (data) => { // recieve message from client
-        console.log('Resived message', data);
+        // console.log('Resived message', data);
         
         const serverChat = {
             text: data.message,
