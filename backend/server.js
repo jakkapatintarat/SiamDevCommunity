@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
     // console.log(`Socket ${socket.id} connected`);
     socket.on('sendMessage', (data) => { // recieve message from client
         // console.log('Resived message', data);
-        
+
         const serverChat = {
             text: data.message,
             isChatOwner: false,
@@ -54,6 +54,7 @@ io.on('connection', (socket) => {
 const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
 const AdminBlogModel = require('./models/adminBlogSchema');
+const CommentsModel = require('./models/comment');
 
 // file path / storage
 // ตั้งค่า Multer
@@ -202,11 +203,11 @@ app.patch('/api/user/update/:id', async (req, res) => {
     try {
         const userId = req.params.id;   // get param
         const updateData = req.body;
-        const {username, password, email, fname, lname, tel} = req.body;
+        const { username, password, email, fname, lname, tel } = req.body;
         console.log(updateData);
         const hashedPassword = await bcrypt.hash(password, 10); // เอารหัสผ่านไปเข้ารหัส 10 รอบ
 
-        const updateUser = await userModel.findByIdAndUpdate(userId, {username, password:hashedPassword, email, fname, lname, tel});
+        const updateUser = await userModel.findByIdAndUpdate(userId, { username, password: hashedPassword, email, fname, lname, tel });
         if (updateUser) {
             res.json({ message: `update ${userId} success!`, updateUser });
         } else (err) => {
@@ -295,6 +296,30 @@ app.delete('/api/delete/:id', async (req, res) => {
         res.json({ message: `Already no have blog!. Can't delete`, error });
     }
 });
+
+// *****
+// Comments 
+// API 
+// *****
+// All comments
+app.get('/api/comments', async (req, res) => {
+    const comments = await CommentsModel.find();
+    res.json(comments);
+});
+
+// Find comment by blogId
+app.get('/api/comments/:blogId', async (req, res) => {
+    const comments = await CommentsModel.find({blogId: req.params.blogId});
+    res.json(comments);
+});
+
+// create comment
+app.post('/api/comments/create', async (req, res) => {
+    const { blogId, userId, comment } = req.body;
+    const addBlog = await CommentsModel.create({blogId: blogId, userId: userId, comment: comment});
+    res.json(addBlog);
+});
+
 
 // *****
 // Blogs Admin 
