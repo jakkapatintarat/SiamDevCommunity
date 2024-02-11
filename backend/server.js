@@ -309,14 +309,14 @@ app.get('/api/comments', async (req, res) => {
 
 // Find comment by blogId
 app.get('/api/comments/:blogId', async (req, res) => {
-    const comments = await CommentsModel.find({blogId: req.params.blogId});
+    const comments = await CommentsModel.find({ blogId: req.params.blogId });
     res.json(comments);
 });
 
 // create comment
 app.post('/api/comments/create', async (req, res) => {
-    const { blogId, userId, comment } = req.body;
-    const addBlog = await CommentsModel.create({blogId: blogId, userId: userId, comment: comment});
+    const { blogId, userId, comment, fname, profileImg } = req.body;
+    const addBlog = await CommentsModel.create({ blogId: blogId, userId: userId, comment: comment, fname: fname, profileImg: profileImg });
     res.json(addBlog);
 });
 

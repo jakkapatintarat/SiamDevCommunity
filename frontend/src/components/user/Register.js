@@ -28,9 +28,9 @@ export default function Register() {
                 tel: telephone,
                 email: email,
             });
-            const token = response.data.token;
-            localStorage.setItem('token', token);
-            navigate('/')
+            // const token = response.data.token;
+            // localStorage.setItem('token', token);
+            navigate('/login')
         } catch (error) {
             console.error("Sign in failed", error);
         }
