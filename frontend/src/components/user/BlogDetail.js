@@ -28,11 +28,20 @@ export default function BlogDetail() {
     console.log(commentForm);
     try {
       const res = await axios.post('http://localhost:5000/api/comments/create', commentForm)
-      console.log(res);
+      // console.log(res);
       window.location.reload();
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const handleBookmark = async () => {
+    const blogId = blog._id
+    const userId = user.id
+    console.log('userId',userId);
+    console.log('blogId',blogId);
+    console.log('blogId',blogId);
+    await axios.post(`http://localhost:5000/api/bookmark/create`, {blogId, userId})
   }
 
   useEffect(() => {
@@ -80,7 +89,9 @@ export default function BlogDetail() {
       <section className="max-w-xl w-2/6 bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
         <div className="max-w-xl mx-auto px-4">
           <div className="flex justify-center items-center mb-4">
-            <button className="flex items-center gap-3 text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+            <button className="flex items-center gap-3 text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            onClick={handleBookmark}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

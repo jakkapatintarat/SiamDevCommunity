@@ -55,6 +55,7 @@ const BlogModel = require('./models/blogSchema');
 const userModel = require('./models/userSchema');
 const AdminBlogModel = require('./models/adminBlogSchema');
 const CommentsModel = require('./models/comment');
+const BookmarkModel = require('./models/bookmarkSchema');
 
 // file path / storage
 // ตั้งค่า Multer
@@ -392,7 +393,24 @@ app.delete('/api/deleteadminblog/:id', async (req, res) => {
 // Get Image
 app.use('/imgs', express.static(path.join(__dirname, 'imgs'))) // ทุก req ที่ขึ้นต้น /img express จะเข้าไปทำงานเกี่ยวกับไฟล์ใน folder imgs
 
+// *****
+// Bookmark 
+// API 
+// *****
+// Bookmark Get All
+app.get('/api/bookmark', async (req, res) => {
+    const bookmark = await BookmarkModel.find();
+    res.json(bookmark);
+});
 
+// Bookmark Create
+app.post('/api/bookmark/create', async (req, res) => {
+    console.log(req.body);
+    const blogId = req.body.blogId;
+    const userId = req.body.userId;
+    const CreateBookmark = await BookmarkModel.create({blogId, userId});
+    res.json(CreateBookmark);
+});
 
 
 

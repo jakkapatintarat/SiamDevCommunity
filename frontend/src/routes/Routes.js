@@ -10,6 +10,7 @@ import Navbar from "../components/user/Navbar"
 import BlogDetail from "../components/user/BlogDetail"
 import CreateBlog from "../components/user/CreateBlog"
 import BlogAdminDetail from "../components/user/BlogAdminDetail"
+import Bookmark from "../components/user/Bookmark"
 
 export default function Web() {
     return (
@@ -27,6 +28,7 @@ export default function Web() {
             <Route path='/register' element={<><Navbar/><Register/></>} />
             <Route path='/createblog' element={<><Navbar/><CreateBlog/></>} />
             <Route path='/blogsadmin:blogId' element={<><Navbar/><CreateBlog/></>} />
+            <Route path='/bookmark' element={<><Navbar/><Bookmark/></>} />
         </Routes>
         </>
     )
