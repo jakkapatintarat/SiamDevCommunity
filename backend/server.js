@@ -405,11 +405,18 @@ app.get('/api/bookmark', async (req, res) => {
 
 // Bookmark Create
 app.post('/api/bookmark/create', async (req, res) => {
-    console.log(req.body);
     const blogId = req.body.blogId;
     const userId = req.body.userId;
-    const CreateBookmark = await BookmarkModel.create({blogId, userId});
-    res.json(CreateBookmark);
+    const isUserBookmark = await BookmarkModel.findOne({userId: userId, blogId: blogId});
+    console.log(isUserBookmark);
+
+    //ถ้า userId นี้มี blogId นี้อยู่แล้วจะไม่บันทึก
+    if(!isUserBookmark){
+        const CreateBookmark = await BookmarkModel.create({blogId, userId});
+        res.json(CreateBookmark);
+    }else{
+        res.json({message: "already bookmarked"});
+    }
 });
 
 
