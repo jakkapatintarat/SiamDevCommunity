@@ -419,7 +419,25 @@ app.post('/api/bookmark/create', async (req, res) => {
     }
 });
 
+// Check already bookmark
+app.get('/api/bookmark/check', async (req, res) => {
+    const blogId = req.body.blogId;
+    const userId = req.body.userId;
+    const haveBookmark = await BookmarkModel.findOne({userId: userId, blogId: blogId});
+    if(haveBookmark){
+        res.json({message: "have Bookmark"});
+    }else{
+        res.json({message: "no have Bookmark"});
+    }
+})
 
+// Bookmark Delete
+app.delete('/api/bookmark/delete', async (req, res) => {
+    const blogId = req.body.blogId;
+    const userId = req.body.userId;
+    const deleteBookmark = await BookmarkModel.findOneAndDelete({blogId, userId});
+    res.json({message: "deleted success", deleteBookmark})
+});
 
 
 //start server
