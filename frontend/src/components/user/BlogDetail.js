@@ -42,6 +42,8 @@ export default function BlogDetail() {
     console.log('blogId',blogId);
     console.log('blogId',blogId);
     await axios.post(`http://localhost:5000/api/bookmark/create`, {blogId, userId})
+    alert("บันทึกสำเร็จ")
+
   }
 
   useEffect(() => {
