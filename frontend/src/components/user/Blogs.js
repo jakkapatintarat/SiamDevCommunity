@@ -79,21 +79,17 @@ export default function Blogs() {
                 <div className="h-56 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-72 xl:h-80">
                   <img
                     src={blog.img}
-                    alt=""
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
-                <h3 className="mt-4 text-sm text-gray-700">
+                <h3 className="mt-2 text-md text-gray-700">
                   <a href={`/blogs/${blog._id}`}>
                     <span className="absolute inset-0" />
                     {blog.title}
                   </a>
                 </h3>
 
-                <p className="mt-1 text-sm text-gray-500">{blog.author}</p>
-                <p className="mt-1 text-sm font-medium text-gray-900">
-                  {blog.content}
-                </p>
+                <p className="mb-5 text-sm text-gray-500">Author: {blog.author}</p>
               </div>
             ))}
           </div>
