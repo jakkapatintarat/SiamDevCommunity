@@ -2,68 +2,115 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Bookmark() {
-  const [bookmarks, setBookMarks] = useState([]);
+  const [bookmark, setBookmark] = useState([]);
+    // ดึงข้อมูลผู้ใช้
+    const userData = localStorage.getItem("token");
+    const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
+    const profile = decodedPayload.result || decodedPayload;
+    const [user, setUser] = useState({
+      username: profile.username,
+      password: '',
+      email: profile.email,
+      fname: '',
+      lname: '',
+      tel: '',
+    });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/bookmark");
-        console.log(response.data);
-        setBookMarks(response.data);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    const fetchBookmark = async () => {
+      const bookmark = axios.get('http://localhost:5000/api/bookmark/self')
+    }
+  })
+  const orders = [
+    {
+      number: '4376',
+      status: 'Delivered on January 22, 2021',
+      href: '#',
+      invoiceHref: '#',
+      products: [
+        {
+          id: 1,
+          name: 'Machined Brass Puzzle',
+          href: '#',
+          price: '$95.00',
+          color: 'Brass',
+          size: '3" x 3" x 3"',
+          imageSrc: 'https://tailwindui.com/img/ecommerce-images/order-history-page-07-product-01.jpg',
+          imageAlt: 'Brass puzzle in the shape of a jack with overlapping rounded posts.',
+        },
+        // More products...
+      ],
+    },
+    // More orders...
+  ]
 
   return (
-    <div className="bg-slate-700 min-h-screen flex  flex-wrap justify-center ">
-      <div className="bg-slate-600  w-full mx-20  p-8 ">
-        <h1 className="text-center  text-gray-50 text-xl text-bg-dark">
-          BOOK MARK
-        </h1>
-        {bookmarks.map((bookmark) => (
-
-        <div className="mx-auto  max-w-2xl px-4 py-16 sm:px-6 sm:py-2 lg:max-w-7xl">
-          <div className="relative overflow-hidden rounded-lg lg:h-96">
-            <div className="absolute inset-0">
-              <img
-                src="https://tailwindui.com/img/ecommerce-images/category-page-01-featured-collection.jpg"
-                alt=""
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
-            <div
-              aria-hidden="true"
-              className="relative h-96 w-full lg:hidden"
-            />
-            <div
-              aria-hidden="true"
-              className="relative h-32 w-full lg:hidden"
-            />
-            <div className="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black bg-opacity-75 p-6 backdrop-blur backdrop-filter sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg">
-              <div>
-                <h2 className="text-xl font-bold text-white">
-                  Workspace Collection
-                </h2>
-                <p className="mt-1 text-sm text-gray-300">
-                  Upgrade your desk with objects that keep you organized and
-                  clear-minded.
-                </p>
-              </div>
-              <a
-                href="#"
-                className="mt-6 flex flex-shrink-0 items-center justify-center rounded-md border border-white border-opacity-25 bg-white bg-opacity-0 px-4 py-3 text-base font-medium text-white hover:bg-opacity-10 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-full"
-              >
-                ดูรายละเอียด
-              </a>
-            </div>
-          </div>
+    <div className="bg-white">
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+        <div className="max-w-xl">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Your Bookmarks
+          </h1>
+          <p className="mt-2 text-sm text-gray-500">
+            List of all your bookmarks
+          </p>
         </div>
-          ))}
 
+        <div className="mt-12 space-y-16 sm:mt-16">
+          {orders.map((order) => (
+            <section key={order.number} aria-labelledby={`${order.number}-heading`}>
+              <div className="space-y-1 md:flex md:items-baseline md:space-x-4 md:space-y-0">
+                <h2 id={`${order.number}-heading`} className="text-lg font-medium text-gray-900 md:flex-shrink-0">
+                  Order #{order.number}
+                </h2>
+                <div className="space-y-5 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 md:min-w-0 md:flex-1">
+                  <p className="text-sm font-medium text-gray-500">{order.status}</p>
+                </div>
+              </div>
+
+              <div className="-mb-6 mt-6 flow-root divide-y divide-gray-200 border-t border-gray-200">
+                {order.products.map((product) => (
+                  <div key={product.id} className="py-6 sm:flex">
+                    <div className="flex space-x-4 sm:min-w-0 sm:flex-1 sm:space-x-6 lg:space-x-8">
+                      <img
+                        src={product.imageSrc}
+                        alt={product.imageAlt}
+                        className="h-20 w-20 flex-none rounded-md object-cover object-center sm:h-48 sm:w-48"
+                      />
+                      <div className="min-w-0 flex-1 pt-1.5 sm:pt-0">
+                        <h3 className="text-sm font-medium text-gray-900">
+                          <a href={product.href}>{product.name}</a>
+                        </h3>
+                        <p className="truncate text-sm text-gray-500">
+                          <span>{product.color}</span>{' '}
+                          <span className="mx-1 text-gray-400" aria-hidden="true">
+                            &middot;
+                          </span>{' '}
+                          <span>{product.size}</span>
+                        </p>
+                        <p className="mt-1 font-medium text-gray-900">{product.price}</p>
+                      </div>
+                    </div>
+                    <div className="mt-6 space-y-4 sm:ml-6 sm:mt-0 sm:w-40 sm:flex-none">
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2.5 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-full sm:flex-grow-0"
+                      >
+                        View Blog
+                      </button>
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-full sm:flex-grow-0"
+                      >
+                        Delete Bookmark
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
     </div>
   );

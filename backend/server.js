@@ -403,23 +403,53 @@ app.get('/api/bookmark', async (req, res) => {
     res.json(bookmark);
 });
 
+// Bookmark Get by userId
+app.get('/api/bookmark/self', async (req, res) => {
+    const userId = req.body.userId;
+    try {
+        const bookmarks = await BookmarkModel.find({ userId: userId }).populate('blogId');
+        res.json({ bookmarks });
+    } catch (error) {
+        res.json({message: 'no have bookmark', error})
+    }
+
+})
+
 // Bookmark Create
 app.post('/api/bookmark/create', async (req, res) => {
     const blogId = req.body.blogId;
     const userId = req.body.userId;
-    const isUserBookmark = await BookmarkModel.findOne({userId: userId, blogId: blogId});
+    const isUserBookmark = await BookmarkModel.findOne({ userId: userId, blogId: blogId });
     console.log(isUserBookmark);
 
     //ถ้า userId นี้มี blogId นี้อยู่แล้วจะไม่บันทึก
-    if(!isUserBookmark){
-        const CreateBookmark = await BookmarkModel.create({blogId, userId});
+    if (!isUserBookmark) {
+        const CreateBookmark = await BookmarkModel.create({ blogId, userId });
         res.json(CreateBookmark);
-    }else{
-        res.json({message: "already bookmarked"});
+    } else {
+        res.json({ message: "already bookmarked" });
     }
 });
 
+// Check already bookmark
+app.get('/api/bookmark/check', async (req, res) => {
+    const blogId = req.body.blogId;
+    const userId = req.body.userId;
+    const haveBookmark = await BookmarkModel.findOne({ userId: userId, blogId: blogId });
+    if (haveBookmark) {
+        res.json({ message: "have Bookmark" });
+    } else {
+        res.json({ message: "no have Bookmark" });
+    }
+})
 
+// Bookmark Delete
+app.delete('/api/bookmark/delete', async (req, res) => {
+    const blogId = req.body.blogId;
+    const userId = req.body.userId;
+    const deleteBookmark = await BookmarkModel.findOneAndDelete({ blogId, userId });
+    res.json({ message: "deleted success", deleteBookmark })
+});
 
 
 //start server

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const bookmarkSchema = new mongoose.Schema({
-    userId: String,
-    blogId: String,
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
+    blogId: {type: mongoose.Schema.Types.ObjectId, ref: 'blogs'},
     create_at: {
         type: Date,
         default: Date.now(),
