@@ -25,6 +25,7 @@ export default function Bookmark() {
   const handleDelete = async (bookmarkId) => {
     console.log(bookmarkId);
     await axios.delete(`http://localhost:5000/api/bookmark/delete`, bookmarkId);
+    alert("ลบสำเร็จแล้ว")
     window.location.reload();
   }
 
