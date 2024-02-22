@@ -404,16 +404,15 @@ app.get('/api/bookmark', async (req, res) => {
 });
 
 // Bookmark Get by userId
-app.get('/api/bookmark/self', async (req, res) => {
-    const userId = req.body.userId;
+app.get('/api/bookmark/self/:userId', async (req, res) => {
+    const userId = req.params.userId;
     try {
         const bookmarks = await BookmarkModel.find({ userId: userId }).populate('blogId');
         res.json({ bookmarks });
     } catch (error) {
         res.json({message: 'no have bookmark', error})
     }
-
-})
+});
 
 // Bookmark Create
 app.post('/api/bookmark/create', async (req, res) => {
@@ -445,9 +444,8 @@ app.get('/api/bookmark/check', async (req, res) => {
 
 // Bookmark Delete
 app.delete('/api/bookmark/delete', async (req, res) => {
-    const blogId = req.body.blogId;
-    const userId = req.body.userId;
-    const deleteBookmark = await BookmarkModel.findOneAndDelete({ blogId, userId });
+    const bookmarkId = req.body.bookmarkId;
+    const deleteBookmark = await BookmarkModel.findOneAndDelete(bookmarkId);
     res.json({ message: "deleted success", deleteBookmark })
 });
 
