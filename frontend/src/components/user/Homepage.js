@@ -37,14 +37,14 @@ export default function Homepage() {
                   className="h-full w-full object-cover object-center"
                 />
               </div>
-              <h3 className="mt-4 text-sm text-gray-700">
+              <h3 className="mt-4 text-sm text-gray-900">
               <a href={`blogsadmin/${blog._id}`}>
                   <span className="absolute inset-0" />
                   {blog.title}
                 </a>
               </h3>
-              <p className="mt-1 text-sm text-gray-500">{blog.content}</p>
-              <p className="mt-1 text-sm font-medium text-gray-900">{blog.author}</p>
+              {/* <p className="mt-1 text-sm text-gray-500">{blog.content}</p> */}
+              <p className="mb-3 text-sm font-medium text-gray-700">Author: {blog.author}</p>
             </div>
           ))}
         </div>
