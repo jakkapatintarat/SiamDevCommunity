@@ -1,0 +1,14 @@
+{
+  "name": "siamdevcommunity",
+  "version": "1.0.0",
+  "description": "โปรเจ็คจบ ป.ตรี จักรพรรดิ / หัสดิน",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "cd frontend && npm i && npm start",
+    "backend": "cd backend && npm i && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
