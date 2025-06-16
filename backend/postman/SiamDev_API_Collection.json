@@ -1,0 +1,648 @@
+{
+    "info": {
+        "name": "SiamDev API Collection",
+        "description": "API collection for SiamDev Community",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"your_username\",\n    \"password\": \"your_password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/auth/login",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "auth", "login"]
+                        }
+                    }
+                },
+                {
+                    "name": "Admin Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"admin_password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/auth/login/admin",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "auth", "login", "admin"]
+                        }
+                    }
+                },
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"new_user\",\n    \"password\": \"user_password\",\n    \"email\": \"user@example.com\",\n    \"fname\": \"First\",\n    \"lname\": \"Last\",\n    \"tel\": \"0812345678\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/auth/register",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "auth", "register"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "user_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"new_user\",\n    \"password\": \"user_password\",\n    \"email\": \"user@example.com\",\n    \"fname\": \"First\",\n    \"lname\": \"Last\",\n    \"tel\": \"0812345678\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/add",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users", "add"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update User",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"updated_username\",\n    \"password\": \"new_password\",\n    \"email\": \"updated@example.com\",\n    \"fname\": \"Updated\",\n    \"lname\": \"Name\",\n    \"tel\": \"0898765432\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/update/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users", "update", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "user_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/delete/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users", "delete", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "user_id_here"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Blogs",
+            "item": [
+                {
+                    "name": "Get All Blogs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/blogs",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "blogs"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Blog by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/blog/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "blog", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "blog_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Blog",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "title",
+                                    "value": "Blog Title",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "content",
+                                    "value": "Blog Content",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "author",
+                                    "value": "Author Name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "img",
+                                    "type": "file",
+                                    "src": "/path/to/image.jpg"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/createblog",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "createblog"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Blog",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Title\",\n    \"content\": \"Updated Content\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/update/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "update", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "blog_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Blog",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/delete/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "delete", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "blog_id_here"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Admin Blogs",
+            "item": [
+                {
+                    "name": "Get All Admin Blogs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/adminblogs",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "adminblogs"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Admin Blog by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/adminblog/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "adminblog", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "blog_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Admin Blog",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "title",
+                                    "value": "Admin Blog Title",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "content",
+                                    "value": "Admin Blog Content",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "author",
+                                    "value": "Admin Name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "img",
+                                    "type": "file",
+                                    "src": "/path/to/image.jpg"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/createadminblog",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "createadminblog"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Admin Blog",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Admin Title\",\n    \"content\": \"Updated Admin Content\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/updateadminblog/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "updateadminblog", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "blog_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Admin Blog",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/deleteadminblog/:id",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "deleteadminblog", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "blog_id_here"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Comments",
+            "item": [
+                {
+                    "name": "Get All Comments",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/comments",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "comments"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Comments by Blog ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/comments/:blogId",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "comments", ":blogId"],
+                            "variable": [
+                                {
+                                    "key": "blogId",
+                                    "value": "blog_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Comment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"blogId\": \"blog_id_here\",\n    \"userId\": \"user_id_here\",\n    \"comment\": \"Your comment here\",\n    \"fname\": \"First Name\",\n    \"profileImg\": \"profile_image_url\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/comments/create",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "comments", "create"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Bookmarks",
+            "item": [
+                {
+                    "name": "Get All Bookmarks",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/bookmark",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "bookmark"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User Bookmarks",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/bookmark/self/:userId",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "bookmark", "self", ":userId"],
+                            "variable": [
+                                {
+                                    "key": "userId",
+                                    "value": "user_id_here"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Bookmark",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"blogId\": \"blog_id_here\",\n    \"userId\": \"user_id_here\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/bookmark/create",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "bookmark", "create"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Bookmark",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"bookmarkId\": \"bookmark_id_here\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/bookmark/delete",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "bookmark", "delete"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+} 
