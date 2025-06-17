@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BLOG } from '../../constants/api';
 
 
 export default function CreateBlog() {
@@ -7,6 +8,7 @@ export default function CreateBlog() {
     title: "",
     content: "",
     author: "",
+    tags: "",
     img: null,
   });
 
@@ -15,10 +17,20 @@ export default function CreateBlog() {
   const userData = localStorage.getItem("token");
   const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
   const profile = decodedPayload.result || decodedPayload;
-  console.log(profile);
 
-  const handleFileChange = (e) => {
-    setBlogData({ ...blogData, img: e.target.files[0] })
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'img') {
+      setBlogData(prev => ({
+        ...prev,
+        [name]: files[0]
+      }));
+    } else {
+      setBlogData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   }
 
   const createBlog = async (e) => {
@@ -27,14 +39,20 @@ export default function CreateBlog() {
     formData.append('title', blogData.title)
     formData.append('content', blogData.content)
     formData.append('author', profile.username)
-    formData.append('img', blogData.img)
+    if (blogData.img) {
+      formData.append('img', blogData.img)
+    }
     try {
-      const res = await axios.post(`http://localhost:5000/api/createblog`, formData)
-      console.log(res);
+      const res = await axios.post(BLOG.CREATE, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
       alert("สร้างสำเร็จ")
       window.location.reload();
     } catch (error) {
-      console.error(error);
+      console.error("เกิดข้อผิดพลาดในการสร้าง blog:", error);
+      alert("เกิดข้อผิดพลาดในการสร้าง blog");
     }
   }
 
@@ -52,22 +70,18 @@ export default function CreateBlog() {
         <form
           className="space-y-6"
           onSubmit={createBlog}
-          enctype="multipart/form-data"
+          encType="multipart/form-data"
         >
           <div>
             <label className="text-white dark:text-gray-200" htmlFor="username">
               หัวข้อ
             </label>
             <input
-              id="title"
-              name="title"
               type="text"
+              name="title"
+              value={blogData.title}
               required
-              autoComplete="title"
-              onChange={(e) => {
-                console.log('New title:', e.target.value);
-                setBlogData((prev) => ({ ...prev, title: e.target.value }))
-              }}
+              onChange={handleChange}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>
@@ -80,13 +94,10 @@ export default function CreateBlog() {
               รายละเอียด
             </label>
             <textarea
-              id="content"
-              type="textarea"
+              name="content"
+              value={blogData.content}
               required
-              onChange={(e) => {
-                console.log('New content:', e.target.value);
-                setBlogData((prev) => ({ ...prev, content: e.target.value }))
-              }}
+              onChange={handleChange}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             ></textarea>
           </div>
@@ -117,12 +128,11 @@ export default function CreateBlog() {
                   >
                     <span className="">Upload a file</span>
                     <input
-                      id="file-upload"
-                      name="file-upload"
                       type="file"
+                      name="img"
                       accept=".png, .jpg, .jpeg"
                       required
-                      onChange={handleFileChange}
+                      onChange={handleChange}
                       className="sr-only"
                     />
                   </label>

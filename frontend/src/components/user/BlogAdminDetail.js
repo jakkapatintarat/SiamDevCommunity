@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { ADMIN_BLOG } from "../../constants/api";
 
 export default function BlogAdminDetail() {
   const [blog, setBlog] = useState({});
@@ -10,9 +11,8 @@ export default function BlogAdminDetail() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/adminblog/${blogId}`
+          `${ADMIN_BLOG.GET_BY_ID(blogId)}`
         );
-        console.log(response.data);
         setBlog(response.data);
       } catch (error) {
         console.error("Error fetching blogs:", error);

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import isAuthorized from '../../utils/Adminisauthorized';
+import { USER } from '../../constants/api';
 
 export default function Manageuser() {
   // Check Auth
@@ -36,7 +37,7 @@ export default function Manageuser() {
     event.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:5000/api/adduser", {
+      const res = await axios.post(USER.CREATE, {
         username: username,
         password: password,
         fname: firstName,
@@ -70,7 +71,7 @@ export default function Manageuser() {
     e.preventDefault();
     try {
       // console.log(selectedUser._id);
-      const res = await axios.patch(`http://localhost:5000/api/user/update/${selectedUser._id}`, {
+      const res = await axios.patch(USER.UPDATE(selectedUser._id), {
         username: selectedUser.username,
         password: selectedUser.password,
         fname: selectedUser.fname,
@@ -88,7 +89,7 @@ export default function Manageuser() {
   const handleDeleteClick = async (id) => {
     console.log(id);
     try {
-      const res = await axios.delete(`http://localhost:5000/api/delete/user/${id}`);
+      const res = await axios.delete(USER.DELETE(id));
       console.log(res);
       alert('deleted') //ดิส
       window.location.reload();
@@ -98,7 +99,7 @@ export default function Manageuser() {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/users')
+    axios.get(USER.GET_ALL)
       .then((res) => {
         console.log(res.data);
         setUsers(res.data)

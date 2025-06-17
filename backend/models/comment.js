@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const commentSchema = new mongoose.Schema({
     blogId: String,
     userId: String,
-    fname: String,
+    username: String,
     comment: String,
     profileImg: String,
     create_at: {

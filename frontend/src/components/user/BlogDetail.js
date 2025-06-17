@@ -1,55 +1,109 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { BLOG, COMMENT, BOOKMARK } from "../../constants/api";
+
 export default function BlogDetail() {
   const [blog, setBlog] = useState({});
   const { blogId } = useParams();
+  
   // ดึงข้อมูลผู้ใช้
-  const userData = localStorage.getItem("token");
-  const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
-  const profile = decodedPayload.result || decodedPayload;
   const [user, setUser] = useState({
-    id: profile._id,
-    fname: profile.fname,
-    img: profile.img
+    id: '',
+    username: 'ผู้เยี่ยมชม',
+    img: ''
   });
+
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem("token");
+      if (userData) {
+        const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
+        const profile = decodedPayload.result || decodedPayload;
+        setUser({
+          id: profile._id,
+          username: profile.username,
+          img: profile.img
+        });
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการอ่านข้อมูลผู้ใช้:", error);
+    }
+  }, []);
 
   const [commentForm, setCommentForm] = useState({
     blogId: blogId,
-    userId: user.id,
-    fname: user.fname,
-    profileImg: user.img,
+    userId: '',
+    username: 'ผู้เยี่ยมชม',
+    profileImg: '',
     comment: '',
   });
+
+  // อัพเดทข้อมูล user ใน commentForm เมื่อ user เปลี่ยน
+  useEffect(() => {
+    setCommentForm(prev => ({
+      ...prev,
+      userId: user.id,
+      username: user.username,
+      profileImg: user.img,
+      comment: ''
+    }));
+  }, [user]);
+
   const [commentList, setCommentList] = useState([]);
 
   const handelSubmitComment = async (e) => {
-    e.preventDefault()
-    console.log(commentForm);
+    e.preventDefault();
+    if (!user.id) {
+      alert("กรุณาเข้าสู่ระบบก่อนเพิ่มความคิดเห็น");
+      return;
+    }
     try {
-      const res = await axios.post('http://localhost:5000/api/comments/create', commentForm)
-      // console.log(res);
-      window.location.reload();
+      const commentData = {
+        comment: commentForm.comment,
+        userId: user.id,
+        username: user.username,
+        profileImg: user.img
+      };
+      console.log("commentData",commentData);
+      await axios.post(`${COMMENT.CREATE(blogId)}`, commentData);
+      setCommentForm(prev => ({ ...prev, comment: '' })); // รีเซ็ตเฉพาะ comment
+      getComment(); // ดึงข้อมูล comments ใหม่
     } catch (error) {
-      console.error(error);
+      console.error("เกิดข้อผิดพลาดในการเพิ่มความคิดเห็น:", error);
+      alert("เกิดข้อผิดพลาดในการเพิ่มความคิดเห็น");
     }
   }
 
   const handleBookmark = async () => {
-    const blogId = blog._id
-    const userId = user.id
-    console.log('userId',userId);
-    console.log('blogId',blogId);
-    console.log('blogId',blogId);
-    await axios.post(`http://localhost:5000/api/bookmark/create`, {blogId, userId})
-    alert("บันทึกสำเร็จ")
+    if (!user.id) {
+      alert("กรุณาเข้าสู่ระบบก่อนบันทึก");
+      return;
+    }
+    const blogId = blog._id;
+    const userId = user.id;
+    try {
+      await axios.post(`${BOOKMARK.CREATE}`, {blogId, userId});
+      alert("บันทึกสำเร็จ");
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการบันทึก:", error);
+      alert("เกิดข้อผิดพลาดในการบันทึก");
+    }
+  }
 
+  const getComment = async () => {
+    try {
+      const comment = await axios.get(`${COMMENT.GET_BY_BLOG_ID(blogId)}`);
+      setCommentList(comment.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
   }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/blog/${blogId}`);
+        const response = await axios.get(`${BLOG.GET_BY_ID(blogId)}`);
         setBlog(response.data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -59,16 +113,8 @@ export default function BlogDetail() {
   }, []);
 
   useEffect(() => {
-    const getComment = async () => {
-      try {
-        const comment = await axios.get(`http://localhost:5000/api/comments/${blogId}`);
-        setCommentList(comment.data);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-    }
     getComment();
-  }, [])
+  }, []);
 
   return (
     <div className="bg-slate-700 min-h-screen flex justify-center ">
@@ -77,14 +123,12 @@ export default function BlogDetail() {
         <h1 className="text-center text-gray-50 text-xl text-bg-dark">By : {blog.author}</h1>
 
         <div className="p-4 rounded-md flex justify-center items-center">
-          <div><img src={blog.img} className=" h-auto max-w-full rounded-lg" /></div>
+          <div><img src={blog.image} className=" h-auto max-w-full rounded-lg" /></div>
         </div>
 
         <div className="bg-white px-5 py-2 mb-4 rounded-md ">
           {blog.content}
         </div>
-
-
       </div>
 
       {/* comment */}
@@ -112,27 +156,34 @@ export default function BlogDetail() {
             </button>
           </div>
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Comments</h2>
+            <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">ความคิดเห็น</h2>
           </div>
           <form className="mb-6" onSubmit={handelSubmitComment}>
             <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-              <label for="comment" className="sr-only">Your comment</label>
-              <textarea id="comment" rows="6"
+              <label htmlFor="comment" className="sr-only">ความคิดเห็นของคุณ</label>
+              <textarea 
+                id="comment" 
+                rows="6"
                 className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
-                placeholder="Write a comment..." required value={commentForm.comment} onChange={(e) => setCommentForm((etc) => ({ ...etc, comment: e.target.value }))}></textarea>
+                placeholder="เขียนความคิดเห็นของคุณ..." 
+                required 
+                value={commentForm.comment} 
+                onChange={(e) => setCommentForm(prev => ({ ...prev, comment: e.target.value }))}
+              />
             </div>
-            <button type="submit"
-              className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-cyan-600 rounded-lg">
-              Post comment
+            <button 
+              type="submit"
+              className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-cyan-600 rounded-lg hover:bg-cyan-700"
+            >
+              เพิ่มความคิดเห็น
             </button>
           </form>
-          {console.log(commentList)}
           {commentList.map((comment, index) => {
-            const formatDate = new Date(comment.create_at).toLocaleDateString('en-US', {
+            const formatDate = new Date(comment.create_at).toLocaleDateString('th-TH', {
               year: 'numeric',
-              month: 'short',
+              month: 'long',
               day: 'numeric',
-            })
+            });
             return (
               <div key={index}>
                 <article className="p-6 mb-3 bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
@@ -142,19 +193,22 @@ export default function BlogDetail() {
                         <img
                           className="mr-2 w-6 h-6 rounded-full"
                           src={comment.profileImg}
-                          alt={comment.fname} />{comment.fname}</p>
+                          alt={comment.username} 
+                        />
+                        {comment.username}
+                      </p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        <time pubdate datetime={comment.create_at} title={formatDate}>{formatDate}</time></p>
+                        <time dateTime={comment.create_at}>{formatDate}</time>
+                      </p>
                     </div>
                   </div>
                   <p className="comment-text break-words dark:text-gray-400">{comment.comment}</p>
                 </article>
               </div>
-            )
+            );
           })}
         </div>
       </section>
-      {/* comment */}
     </div>
   );
 }

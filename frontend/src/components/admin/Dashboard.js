@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import isAuthorized from '../../utils/Adminisauthorized';
 import TopBlogs from './components/TopBolgs';
 import axios from 'axios';
+import { BLOG, USER, COMMENT } from '../../constants/api';
 
 export default function Dashboard() {
   const [userBlogs, setUserBlogs] = useState([]);
@@ -14,15 +15,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     const getUserBlog = async () => {
-      const fetchUserBlogs = await axios.get('http://localhost:5000/api/blogs');
+      const fetchUserBlogs = await axios.get(BLOG.GET_ALL);
       setUserBlogs(fetchUserBlogs.data.length);
     }
     const getUser = async () => {
-      const fetchUser = await axios.get('http://localhost:5000/api/users');
+      const fetchUser = await axios.get(USER.GET_ALL);
       setUser(fetchUser.data.length);
     }
     const getComment = async () => {
-      const fetchComment = await axios.get('http://localhost:5000/api/comments');
+      const fetchComment = await axios.get(COMMENT.GET_ALL);
       setComment(fetchComment.data.length);
     }
 

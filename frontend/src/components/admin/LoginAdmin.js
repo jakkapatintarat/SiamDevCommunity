@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { AUTH } from '../../constants/api';
 
 export default function LoginAdmin() {
   const navigate = useNavigate();
@@ -12,10 +13,12 @@ export default function LoginAdmin() {
     // console.log(email);
     // console.log(password);
     try {
-      const res = await axios.post("http://localhost:5000/login/admin", {
+      const res = await axios.post(AUTH.ADMIN_LOGIN, {
         email: email,
         password: password,
       });
+
+      console.log(res);
       const token = res.data.token;
       if (!token) {
         navigate('/login/admin');

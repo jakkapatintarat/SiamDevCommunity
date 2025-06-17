@@ -1,6 +1,7 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
+import { USER } from '../../constants/api';
 
 export default function Profile() {
   const [editModal, setEditmodal] = useState(false);
@@ -19,9 +20,8 @@ export default function Profile() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const res = await axios.patch(`http://localhost:5000/api/user/update/${profile._id}`, user);
+    const res = await axios.patch(USER.UPDATE(profile._id), user);
     console.log(res);
-
   }
   const handleEditClick = async () => {
     setEditmodal(true);
@@ -44,7 +44,7 @@ export default function Profile() {
               <h3 className="font-bold text-2xl text-gray-400 mb-1"></h3>
               <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
                 <button
-                  type="button"
+                  type="button" 
                   onClick={() => handleEditClick()}
                   className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >

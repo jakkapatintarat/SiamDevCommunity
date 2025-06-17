@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { useState } from 'react'
+import { ADMIN_BLOG } from '../../../constants/api';
 
 export default function Example() {
   const [adminBlogs, setAdminBlogs] = useState([]);
   useState(() => {
     const getAdminBlogs = async () => {
-      const fetchAdminBlogs = await axios.get('http://localhost:5000/api/adminblogs');
+      const fetchAdminBlogs = await axios.get(ADMIN_BLOG.GET_ALL);
       setAdminBlogs(fetchAdminBlogs.data);
       console.log(fetchAdminBlogs.data);
     }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import isAuthenticated from "../../utils/AuthAPI";
+import { BOOKMARK } from '../../constants/api';
 
 export default function Bookmark() {
   // ดึงข้อมูลผู้ใช้
@@ -14,7 +15,7 @@ export default function Bookmark() {
 
   useEffect(() => {
     const fetchBookmark = async () => {
-      const res = await axios.get(`http://localhost:5000/api/bookmark/self/${user.id}`)
+      const res = await axios.get(BOOKMARK.GET_BY_USER_ID(user.id))
       console.log('res', res.data.bookmarks);
       setBookmarks(res.data.bookmarks);
     }
@@ -23,8 +24,7 @@ export default function Bookmark() {
   }, []);
 
   const handleDelete = async (bookmarkId) => {
-    console.log(bookmarkId);
-    await axios.delete(`http://localhost:5000/api/bookmark/delete`, bookmarkId);
+    await axios.delete(BOOKMARK.DELETE, { data: { bookmarkId } });
     alert("ลบสำเร็จแล้ว")
     window.location.reload();
   }
