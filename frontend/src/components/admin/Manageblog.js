@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react'
 import axios from 'axios';
 import isAuthorized from '../../utils/Adminisauthorized';
 import { Dialog, Transition } from '@headlessui/react'
+import { BLOG } from '../../constants/api';
 
 export default function Manageblog() {
   useEffect(() => {
@@ -16,13 +17,32 @@ export default function Manageblog() {
   const [blogData, setBlogData] = useState({
     title: '',
     content: '',
-    author: '',
+    username: '',
     img: null,
   });
 
+  const [user, setUser] = useState([]);
+
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem("token");
+      if (userData) {
+        const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
+        const profile = decodedPayload.result || decodedPayload;
+        setUser({
+          id: profile._id,
+          username: profile.username,
+          img: profile.img
+        });
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการอ่านข้อมูลผู้ใช้:", error);
+    }
+  }, []);
+
   const handleDeleteClick = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/delete/${id}`)
+      const res = await axios.delete(`${BLOG.DELETE}/${id}`)
       // console.log(res);
       window.location.reload();
     } catch (error) {
@@ -44,11 +64,11 @@ export default function Manageblog() {
     const formData = new FormData();
     formData.append('title', blogData.title)
     formData.append('content', blogData.content)
-    formData.append('author', blogData.author)
+    formData.append('username', blogData.username)
     formData.append('img', blogData.img)
     // console.log(blogData);
     try {
-      const res = await axios.post(`http://localhost:5000/api/createblog`, formData)
+      const res = await axios.post(`${BLOG.CREATE}`, formData)
       console.log(res);
       setOpen(false);
       window.location.reload();
@@ -58,11 +78,15 @@ export default function Manageblog() {
   }
 
   useEffect(() => {
-    // get data
-    axios.get('http://localhost:5000/api/blogs')
-      .then((res) => setBlogs(res.data))
-      .catch((err) => console.error('Error get blogs', err))
-    // console.log(blogs);
+    async function fetchData() {
+      try {
+        const res = await axios.get(`${BLOG.GET_ALL}`)
+        setBlogs(res.data.blogs)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchData();
   }, []);
 
   return (
@@ -126,7 +150,7 @@ export default function Manageblog() {
                             {blog.title}
                           </td>
                           <td className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">
-                            <img src={blog.img} alt={blog.title} style={{ maxWidth: '100px' }} />
+                            <img src={blog.image} alt={blog.title} style={{ maxWidth: '100px' }} />
                           </td>
                           <td
                             className="darkspace-nowrap px-3 py-4 text-sm text-dark-900">{blog.author}</td>
@@ -235,10 +259,10 @@ export default function Manageblog() {
                             </label>
                           </div>
                           <div className="mt-2">
-                            <input
+                            <textarea 
                               id="content"
                               name="content"
-                              type="text"
+                              type="text-area"
                               required
                               onChange={(e) => setBlogData((prev) => ({ ...prev, content: e.target.value }))}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -259,9 +283,11 @@ export default function Manageblog() {
                             <input
                               id="author"
                               name="author"
+                              value={user.username}
                               type="text"
+                              disabled
                               required
-                              onChange={(e) => setBlogData((prev) => ({ ...prev, author: e.target.value }))}
+                              onChange={(e) => setBlogData((prev) => ({ ...prev, username: e.target.value }))}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                           </div>
@@ -329,8 +355,8 @@ export default function Manageblog() {
                   <Dialog.Panel className="relative  bg-gradient-to-r bg-dark transform overflow-hidden rounded-lg  bg-white dark:bg-slate-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                     <div className=" text-center text-white">
                       <h1 className='text-xl mb-2 underline decoration-solid'>Title: {selectedBlog.title}</h1>
-                      <h1 className='text-xs mb-2 '>Author: {selectedBlog.author}</h1>
-                      <img class="h-auto mb-3 max-w-full rounded-lg" src={selectedBlog.img}/>
+                      <h1 className='text-xs mb-2 '>Author: {selectedBlog.username}</h1>
+                      <img class="h-auto mb-3 max-w-full rounded-lg" src={selectedBlog.image}/>
                       <h1 className='text-xs mb-2 '>{selectedBlog.content}</h1>
                     </div>
                       <h1 className='text-xs mb-2 text-slate-300'>Create_At: {new Date(selectedBlog.create_at).toUTCString()}</h1>

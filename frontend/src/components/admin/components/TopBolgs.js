@@ -8,7 +8,7 @@ export default function Example() {
     const getAdminBlogs = async () => {
       const fetchAdminBlogs = await axios.get(ADMIN_BLOG.GET_ALL);
       setAdminBlogs(fetchAdminBlogs.data);
-      console.log(fetchAdminBlogs.data);
+      // console.log(fetchAdminBlogs.data);
     }
   
     getAdminBlogs();
@@ -17,7 +17,7 @@ export default function Example() {
     <ul role="list" className="divide-y divide-gray-100">
       {adminBlogs.map((blog) => (
         <li
-          key={blog.id}
+          key={blog._id}
           className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 sm:flex-nowrap"
         >
           <div>

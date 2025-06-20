@@ -20,7 +20,7 @@ export const USER = {
 // Blog Endpoints
 export const BLOG = {
     GET_ALL: `${BASE_URL}/blogs`,
-    GET_BY_ID: (id) => `${BASE_URL}/blogs/${id}`,
+    GET_BY_ID: (id) => `${BASE_URL}/blogs/blogById?blogId=${id}`,
     CREATE: `${BASE_URL}/blogs/create`,
     UPDATE: (id) => `${BASE_URL}/blogs/update/${id}`,
     DELETE: (id) => `${BASE_URL}/blogs/delete/${id}`,
@@ -37,7 +37,7 @@ export const ADMIN_BLOG = {
 
 // Comment Endpoints
 export const COMMENT = {
-    GET_ALL: `${BASE_URL}/comments`,
+    GET_ALL: `${BASE_URL}/blogs/comments`,
     GET_BY_BLOG_ID: (blogId) => `${BASE_URL}/blogs/${blogId}/comments`,
     CREATE: (blogId) => `${BASE_URL}/blogs/${blogId}/comments`,
 };

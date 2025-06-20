@@ -7,7 +7,7 @@ const upload = require('../middleware/upload.middleware');
 router.get('/', blogController.getAllBlogs);
 
 // GET blog by ID
-router.get('/:id', blogController.getBlogById);
+router.get('/blogById', blogController.getBlogById);
 
 // POST create new blog
 router.post('/create', upload.single('img'), blogController.createBlog);
@@ -17,6 +17,9 @@ router.patch('/update/:id', upload.single('img'), blogController.updateBlog);
 
 // DELETE blog
 router.delete('/delete/:id', blogController.deleteBlog);
+
+// GET all comments
+router.get('/comments', blogController.getAllComments); 
 
 // GET blog comments
 router.get('/:id/comments', blogController.getBlogComments);

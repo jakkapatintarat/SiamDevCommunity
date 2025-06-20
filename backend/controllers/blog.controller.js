@@ -18,7 +18,7 @@ class BlogController {
     // Get blog by id
     async getBlogById(req, res) {
         try {
-            const blog = await blogService.getBlogById(req.params.id);
+            const blog = await blogService.getBlogById(req.query.blogId);
             if (!blog) {
                 return res.status(404).json({ message: 'ไม่พบบทความ' });
             }
@@ -151,6 +151,16 @@ class BlogController {
             res.json({ message: 'ลบรายการบันทึกสำเร็จ', bookmark: bookmark });
         } catch (error) {
             res.status(500).json({ message: 'เกิดข้อผิดพลาดในการลบรายการบันทึก', error });
+        }
+    }
+
+    // Get all comments
+    async getAllComments(req, res) {
+        try {
+            const comments = await blogService.getAllComments();
+            res.json({ message: 'ดึงข้อมูลความคิดเห็นสำเร็จ', comments: comments });
+        } catch (error) {
+            res.status(500).json({ message: 'เกิดข้อผิดพลาดในการดึงข้อมูลความคิดเห็น', error });
         }
     }
 }

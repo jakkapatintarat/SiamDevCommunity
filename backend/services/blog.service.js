@@ -43,7 +43,7 @@ class BlogService {
         try {
             const blog = await BlogModel.findById(blogId);
             if (!blog) return null;
-            
+
             const blogData = blog.toObject();
             if (blogData.image) {
                 blogData.image = await this.convertImageToBase64(blogData.image);
@@ -146,8 +146,8 @@ class BlogService {
 
     // Get all bookmark
     async getAllBookmark(userId) {
-        const bookmarks = await BookmarkModel.find({ userId : userId }).sort({ createdAt: -1 });
-       
+        const bookmarks = await BookmarkModel.find({ userId: userId }).sort({ createdAt: -1 });
+
         //return blog detail & img base64
         const bookmarksWithBase64 = await Promise.all(bookmarks.map(async (bookmark) => {
             const blog = await BlogModel.findById(bookmark.blogId);
@@ -170,7 +170,14 @@ class BlogService {
 
     // Delete bookmark
     async deleteBookmark(bookmarkId,) {
-        return await BookmarkModel.findOneAndDelete({ _id : bookmarkId });
+        return await BookmarkModel.findOneAndDelete({ _id: bookmarkId });
+    }
+
+    // Get all comments
+    async getAllComments() {
+
+        const comments = await CommentsModel.find().sort({ createdAt: -1 });
+        return comments;
     }
 }
 
