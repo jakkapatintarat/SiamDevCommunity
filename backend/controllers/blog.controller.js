@@ -113,6 +113,46 @@ class BlogController {
             res.status(500).json({ message: 'เกิดข้อผิดพลาดในการเพิ่มความคิดเห็น', error });
         }
     }
+
+    // Create bookmark
+    async createBookmark(req, res) {
+        try {
+            const blogId = req.body.blogId;
+            const userId = req.body.userId;
+            const bookmark = await blogService.createBookmark(blogId, userId);
+
+            if (bookmark.status === 400) {
+                return res.status(400).json({ message: bookmark.message });
+            }
+
+            
+            res.json({ message: 'เพิ่มรายการบันทึกสำเร็จ', bookmark: bookmark });
+        } catch (error) {
+            res.status(500).json({ message: 'เกิดข้อผิดพลาดในการเพิ่มรายการบันทึก', error });
+        }
+    }
+
+    // Get all bookmark 
+    async getAllBookmark(req, res) {
+        try {
+            const userId = req.params.userId;
+            const bookmark = await blogService.getAllBookmark(userId);
+            res.json({ message: 'ดึงข้อมูลรายการบันทึกสำเร็จ', bookmark: bookmark });
+        } catch (error) {
+            res.status(500).json({ message: 'เกิดข้อผิดพลาดในการดึงข้อมูลรายการบันทึก', error });
+        }
+    }
+
+    // Delete bookmark
+    async deleteBookmark(req, res) {
+        try {
+            const blogId = req.params.id;
+            const bookmark = await blogService.deleteBookmark(blogId);
+            res.json({ message: 'ลบรายการบันทึกสำเร็จ', bookmark: bookmark });
+        } catch (error) {
+            res.status(500).json({ message: 'เกิดข้อผิดพลาดในการลบรายการบันทึก', error });
+        }
+    }
 }
 
 module.exports = new BlogController(); 

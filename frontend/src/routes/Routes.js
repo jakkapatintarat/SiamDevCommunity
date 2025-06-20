@@ -9,6 +9,7 @@ import Register from "../components/user/Register"
 import Navbar from "../components/user/Navbar"
 import BlogDetail from "../components/user/BlogDetail"
 import CreateBlog from "../components/user/CreateBlog"
+import EditBlog from "../components/user/EditBlog"
 import BlogAdminDetail from "../components/user/BlogAdminDetail"
 import Bookmark from "../components/user/Bookmark"
 
@@ -20,6 +21,7 @@ export default function Web() {
             <Route path='/login' element={<><Navbar/><Login /></>} />
             <Route path='/aboutme' element={<><Navbar/><AboutMe/></>} />
             <Route path='/blogs' element={<><Navbar/><Blogs/></>} />
+            <Route path='/blogs/:blogId/edit' element={<><Navbar/><EditBlog/></>} />
             <Route path='/blogs/:blogId' element={<><Navbar/><BlogDetail/></>} />
             <Route path='/community' element={<><Navbar/><Community/></>} />
             <Route path='/' element={<><Navbar/><Homepage/></>} />

@@ -24,4 +24,13 @@ router.get('/:id/comments', blogController.getBlogComments);
 // POST add comment
 router.post('/:id/comments', blogController.addComment);
 
+// Create bookmark
+router.post('/:id/bookmark', blogController.createBookmark);
+
+// Get all bookmark
+router.get('/:userId/bookmark', blogController.getAllBookmark);
+
+// Delete bookmark
+router.delete('/:id/bookmark', blogController.deleteBookmark); 
+
 module.exports = router; 

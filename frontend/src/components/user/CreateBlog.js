@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BLOG } from '../../constants/api';
+import Swal from 'sweetalert2'
 
 
 export default function CreateBlog() {
@@ -48,11 +49,20 @@ export default function CreateBlog() {
           'Content-Type': 'multipart/form-data'
         }
       })
-      alert("สร้างสำเร็จ")
+      Swal.fire({
+        icon: 'success',
+        title: 'สร้างสำเร็จ',
+        showConfirmButton: false,
+        timer: 1500
+      })
       window.location.reload();
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการสร้าง blog:", error);
-      alert("เกิดข้อผิดพลาดในการสร้าง blog");
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาดในการสร้าง blog',
+        text: error.message || '',
+      })
     }
   }
 
@@ -128,6 +138,7 @@ export default function CreateBlog() {
                   >
                     <span className="">Upload a file</span>
                     <input
+                      id="file-upload"
                       type="file"
                       name="img"
                       accept=".png, .jpg, .jpeg"

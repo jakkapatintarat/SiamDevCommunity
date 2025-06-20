@@ -131,6 +131,47 @@ class BlogService {
         });
         return await newComment.save();
     }
+
+    // Create bookmark
+    async createBookmark(blogId, userId) {
+        const bookmark = await BookmarkModel.findOne({ blogId, userId });
+
+        //if bookmark already exists, throw error and return status 400
+        if (bookmark) {
+            return { status: 400, message: 'Bookmark already exists' };
+        }
+        const newBookmark = new BookmarkModel({ blogId, userId });
+        return await newBookmark.save();
+    }
+
+    // Get all bookmark
+    async getAllBookmark(userId) {
+        const bookmarks = await BookmarkModel.find({ userId : userId }).sort({ createdAt: -1 });
+       
+        //return blog detail & img base64
+        const bookmarksWithBase64 = await Promise.all(bookmarks.map(async (bookmark) => {
+            const blog = await BlogModel.findById(bookmark.blogId);
+            if (blog.image) {
+                bookmark.image = await this.convertImageToBase64(blog.image);
+            }
+            return {
+                _id: bookmark._id,
+                blogId: blog._id,
+                title: blog.title,
+                image: blog.image,
+                content: blog.content,
+                author: blog.author,
+                image: bookmark.image,
+            };
+        }));
+
+        return bookmarksWithBase64;
+    }
+
+    // Delete bookmark
+    async deleteBookmark(bookmarkId,) {
+        return await BookmarkModel.findOneAndDelete({ _id : bookmarkId });
+    }
 }
 
 module.exports = new BlogService(); 

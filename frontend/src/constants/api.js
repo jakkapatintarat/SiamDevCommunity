@@ -44,10 +44,9 @@ export const COMMENT = {
 
 // Bookmark Endpoints
 export const BOOKMARK = {
-    GET_ALL: `${BASE_URL}/bookmark`,
-    GET_BY_USER_ID: (userId) => `${BASE_URL}/bookmark/self/${userId}`,
-    CREATE: `${BASE_URL}/bookmark/create`,
-    DELETE: `${BASE_URL}/bookmark/delete`,
+    GET_BY_USER_ID: (userId) => `${BASE_URL}/blogs/${userId}/bookmark`,
+    CREATE: (blogId) => `${BASE_URL}/blogs/${blogId}/bookmark`,
+    DELETE: (blogId) => `${BASE_URL}/blogs/${blogId}/bookmark`,
 };
 
 // API Headers
