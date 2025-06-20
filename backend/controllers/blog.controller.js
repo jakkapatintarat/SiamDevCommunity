@@ -36,6 +36,8 @@ class BlogController {
                 ...req.body,
                 img: req.file ? req.file.path : null
             };
+
+            console.log("blogData",blogData);
             const blog = await blogService.createBlog(blogData);
             res.status(201).json({
                 message: 'สร้างบทความสำเร็จ',

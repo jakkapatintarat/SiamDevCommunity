@@ -9,8 +9,8 @@ export default function Homepage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(ADMIN_BLOG.GET_ALL);
-        console.log(response.data);
-        setBlogs(response.data);
+        console.log(response.data.blogs);
+        setBlogs(response.data.blogs);
       } catch (error) {
         console.error('Error fetching blogs:', error);
       }

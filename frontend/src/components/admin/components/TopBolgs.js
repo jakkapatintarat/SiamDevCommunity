@@ -7,14 +7,16 @@ export default function Example() {
   useState(() => {
     const getAdminBlogs = async () => {
       const fetchAdminBlogs = await axios.get(ADMIN_BLOG.GET_ALL);
-      setAdminBlogs(fetchAdminBlogs.data);
-      // console.log(fetchAdminBlogs.data);
+      if (fetchAdminBlogs.data.blogs.length > 0) {
+        setAdminBlogs(fetchAdminBlogs.data.blogs);
+      }
     }
   
     getAdminBlogs();
   })
   return (
     <ul role="list" className="divide-y divide-gray-100">
+      {console.log(adminBlogs)}
       {adminBlogs.map((blog) => (
         <li
           key={blog._id}

@@ -16,21 +16,21 @@ export default function Dashboard() {
   useEffect(() => {
     const getUserBlog = async () => {
       const fetchUserBlogs = await axios.get(BLOG.GET_ALL);
-      setUserBlogs(fetchUserBlogs.data.blogs.length);
+      setUserBlogs(fetchUserBlogs.data.blogs?.length || 0);
     }
     const getUser = async () => {
       const fetchUser = await axios.get(USER.GET_ALL);
-      setUser(fetchUser.data.length);
+      setUser(fetchUser.data.users?.length || 0);
     }
     const getComment = async () => {
       const fetchComment = await axios.get(COMMENT.GET_ALL);
-      setComment(fetchComment.data.comments.length); 
+      setComment(fetchComment.data.comments?.length || 0);
     }
 
     getUserBlog();
     getUser();
     getComment();
-  })
+  }, []);
 
   return (
     <main className="py-10 lg:pl-72">

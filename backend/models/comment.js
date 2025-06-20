@@ -1,11 +1,26 @@
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
-    blogId: String,
-    userId: String,
-    username: String,
-    comment: String,
-    profileImg: String,
+    blogId: {
+        type: String,
+        required: true,
+    },
+    userId: {
+        type: String,
+        required: true,
+    },
+    username: {
+        type: String,
+        required: true,
+    },
+    comment: {
+        type: String,
+        required: true,
+    },
+    profileImg: {
+        type: String,
+        required: true,
+    },
     create_at: {
         type: Date,
         default: Date.now(),
