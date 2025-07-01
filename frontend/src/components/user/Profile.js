@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
 import { USER } from '../../constants/api';
@@ -9,6 +9,7 @@ export default function Profile() {
   const userData = localStorage.getItem("token");
   const decodedPayload = JSON.parse(atob(userData.split(".")[1]));
   const profile = decodedPayload.result || decodedPayload;
+  
   const [user, setUser] = useState({
     username: profile.username,
     password: '',
@@ -17,6 +18,18 @@ export default function Profile() {
     lname: '',
     tel: '',
   });
+
+  const getProfile = async () => {
+    const res = await axios.get(USER.GET_PROFILE(),{
+      headers: {
+        Authorization: `Bearer ${userData}`,
+      },
+    });
+    setUser(res.data.data);
+  }
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -34,12 +47,12 @@ export default function Profile() {
           <div className="text-center my-4">
             <img
               className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4"
-              src={profile.img}
+              src={user.img}
               alt=""
             />
             <div className="py-2">
               <h3 className="font-bold text-2xl text-gray-800 dark:text-white mb-1">
-                {profile.username}
+                {user.username}
               </h3>
               <h3 className="font-bold text-2xl text-gray-400 mb-1"></h3>
               <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
@@ -73,7 +86,7 @@ export default function Profile() {
 
             <span>
               <h1 className="text-black dark:text-white">
-                E-mail: {profile.email}
+                E-mail: {user.email}
               </h1>
             </span>
           </div>
@@ -100,7 +113,7 @@ export default function Profile() {
 
             <span>
               <h1 className="text-black dark:text-white">
-                ชื่อ: {profile.fname} นามสกุล: {profile.lname}
+                ชื่อ: {user.fname} นามสกุล: {user.lname}
               </h1>
             </span>
           </div>
@@ -122,7 +135,7 @@ export default function Profile() {
 
             <span>
               <h1 className="text-black dark:text-white">
-                เบอร์โทรศัพท์: {profile.tel}
+                เบอร์โทรศัพท์: {user.tel}
               </h1>
             </span>
           </div>
@@ -175,7 +188,7 @@ export default function Profile() {
                             name="firstname"
                             type="text"
                             value={user.fname}
-                            placeholder={profile.fname}
+                            placeholder={user.fname}
                             autoComplete="current-password"
                             required
                             onChange={(e) => {
@@ -205,7 +218,7 @@ export default function Profile() {
                             name="lastname"
                             type="text"
                             value={user.lname}
-                            placeholder={profile.lname}
+                            placeholder={user.lname}
                             onChange={(e) => {
                               console.log('lname:', e.target.value);
                               // อัปเดต state
@@ -234,7 +247,7 @@ export default function Profile() {
                             id="telephone"
                             name="telephone"
                             value={user.tel}
-                            placeholder={profile.tel}
+                            placeholder={user.tel}
                             onChange={(e) => {
                               console.log('tel:', e.target.value);
                               // อัปเดต state

@@ -16,8 +16,10 @@ const authService = {
             throw new Error('user name or password is not valid');
         }
 
+        const secretKey = process.env.SECRET_KEY;
+        console.log(secretKey);
         const { password: _, ...result } = user._doc;
-        const token = jwt.sign({ result }, 'secret', { expiresIn: '1h' });
+        const token = jwt.sign({ result }, secretKey, { expiresIn: '1h' });
         return { message: "login success", user: result, token };
     },
 
@@ -38,7 +40,8 @@ const authService = {
             throw new Error('you are not admin');
         }
 
-        const token = jwt.sign({ result }, 'secret', { expiresIn: '1h' });
+        const secretKey = process.env.SECRET_KEY;
+        const token = jwt.sign({ result }, secretKey, { expiresIn: '1h' });
         return { message: "login success", user: result, token };
     },
 
@@ -51,7 +54,7 @@ const authService = {
             throw new Error('username already exist');
         }
 
-        const avatar = faker.image.avatar();
+        const avatar = "uploads/user/profile/default.jpg";
         const hashedPassword = await bcrypt.hash(password, 10);
         
         const newUser = new userModel({
@@ -77,7 +80,8 @@ const authService = {
             img: newUser.img,
         };
 
-        const token = jwt.sign(payloadToken, 'secret', { expiresIn: '1h' });
+        const secretKey = process.env.SECRET_KEY;
+        const token = jwt.sign(payloadToken, secretKey, { expiresIn: '1h' });
         return { newUser, token };
     }
 };

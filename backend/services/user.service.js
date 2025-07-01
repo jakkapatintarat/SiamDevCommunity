@@ -1,8 +1,24 @@
 const bcrypt = require('bcrypt');
 const { faker } = require('@faker-js/faker');
 const userModel = require('../models/userSchema');
+const path = require('path');
+const fs = require('fs').promises;
 
 const userService = {
+
+    async convertImageToBase64(imagePath) {
+        if (!imagePath) return null;
+        try {
+            const imageBuffer = await fs.readFile(imagePath);
+            const base64Image = imageBuffer.toString('base64');
+            const mimeType = path.extname(imagePath).toLowerCase() === '.png' ? 'image/png' : 'image/jpeg';
+            return `data:${mimeType};base64,${base64Image}`;
+        } catch (error) {
+            console.error('Error converting image to base64:', error);
+            return null;
+        }
+    },
+
     // Get all users
     async getAllUsers() {
         return await userModel.find();
@@ -15,6 +31,18 @@ const userService = {
             throw new Error('no have this user');
         }
         return user;
+    },
+
+    // Get profile
+    async getProfile(userId) {
+        const profile = await userModel.findById(userId);
+        if (!profile) {
+            throw new Error('no have this profile');
+        }
+
+        const avatar = await this.convertImageToBase64(profile.img);
+        profile.img = avatar;
+        return profile;
     },
 
     // Create user

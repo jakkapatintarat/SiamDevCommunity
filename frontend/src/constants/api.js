@@ -12,6 +12,7 @@ export const AUTH = {
 export const USER = {
     GET_ALL: `${BASE_URL}/users`,
     GET_BY_ID: (id) => `${BASE_URL}/users/${id}`,
+    GET_PROFILE: () => `${BASE_URL}/users/profile`,
     CREATE: `${BASE_URL}/users/add`,
     UPDATE: (id) => `${BASE_URL}/users/update/${id}`,
     DELETE: (id) => `${BASE_URL}/users/delete/${id}`,
